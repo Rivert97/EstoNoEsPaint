@@ -38,7 +38,7 @@ void display()
 	for(i=0;i<28;i++)
 	{
 		AsignaColor(i);
-		glRectf(40,40,100,100);
+		glRectf(40+5*i,40,100+5*i,100);
 	}
 
 	glFlush();
