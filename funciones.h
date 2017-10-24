@@ -12,6 +12,8 @@
 typedef struct{			//Estructura punto (x,y)
 	float x;
 	float y;
+	COLOR color;
+	int tamano;
 }PUNTO;
 
 typedef struct{			//Estructura línea (Pi,Pf)
@@ -19,12 +21,19 @@ typedef struct{			//Estructura línea (Pi,Pf)
 	float xf;
 	float yi;
 	float yf;
+	COLOR color;
+	int ancho;
+	char tipo;
 }LINEA;
 
 typedef struct{
 	float x;
 	float y;
 	float l;
+	COLOR color;
+	char tipo_linea;
+	char tipo;
+	int ancho_linea;
 }CUADRADO;
 
 typedef struct 
@@ -33,12 +42,20 @@ typedef struct
 	float y;
 	float ancho;
 	float alto;
+	COLOR color;
+	char tipo_linea;
+	char tipo;
+	int ancho_linea;
 }RECTANGULO;
 
 typedef struct 
 {
 	unsigned char numL;
 	PUNTO *v;
+	COLOR color;
+	char tipo_linea;
+	char tipo;
+	int ancho_linea;
 }POLIGONOi;
 
 typedef struct               //Estructura círculo
@@ -46,6 +63,10 @@ typedef struct               //Estructura círculo
 	float x0;
 	float y0;
 	float r;
+	COLOR color;
+	char tipo_linea;
+	char tipo;
+	int ancho_linea;
 }CIRCULO;
 
 typedef struct				//Estructura elipse
@@ -55,6 +76,10 @@ typedef struct				//Estructura elipse
 	float a;
 	float b;
 	float th;
+	COLOR color;
+	char tipo_linea;
+	char tipo;
+	int ancho_linea;
 }ELIPSE;
 
 typedef enum{			//Enumeración de colores
