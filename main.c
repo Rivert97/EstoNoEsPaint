@@ -29,10 +29,17 @@ int main(int argc, char** argv)
 
 void display()
 {
+	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	TopBar();
 	SideBar();
+
+	for(i=0;i<28;i++)
+	{
+		AsignaColor(i);
+		glRectf(40,40,100,100);
+	}
 
 	glFlush();
 }
