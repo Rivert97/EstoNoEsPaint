@@ -1,4 +1,4 @@
-#include <GL/glut.h>
+#include <GL/glut.h>	//Windows, Linux //Compilar: gcc TestGL.c -c   //Enlazar: gcc TestGL.o -o test -lGL -lglut -lGLU
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -87,26 +87,20 @@ typedef enum{			//Enumeración de colores
 
 
 //________________________________________________ Prototipos
+//Callbacks
 void display(void);
-void AsignaColor(COLOR color);
+void PassiveMouse(int x, int y);
+void Mouse(int button, int state, int x, int y);
+void ActiveMouse(int x, int y);
+//Figuras
 void Linea(LINEA *l);
 void Cuadrado(CUADRADO *c);
 void Rectangulo(RECTANGULO *r);
 void PoligonoI(POLIGONOi *p);
 void Circulo(CIRCULO *c);
 void Elipse(ELIPSE *e);
-void Mouse(int button, int state, int x, int y);
-void ActiveMouse(int x, int y);
 void DibujarTexto(char *text, float x, float y);
-void PassiveMouse(int x, int y);
+//Extras
+void AsignaColor(COLOR color);
 
-//_______________________________________________________________________ Paleta de colores
-const float PaletaColor[27][3] = {0,0,0,/**/0,0,0.5,/**/0,0,1,/**/
-								0,1,1,/**/0,0.5,1,/**/0,0.5,0.5,/**/
-								0,1,0.5,/**/0,1,0,/**/0,0.5,0,/**/
-								0.5,0,0,/**/1,0,0,/**/0.5,0,0.5,/**/
-								1,0,0.5,/**/0.5,0,1,/**/1,0,1,/**/
-								0.5,0.5,0,/**/1,0.5,0,/**/0.5,1,0,/**/
-								1,1,0,/**/0.5,0.5,0.5,/**/1,0.5,0.5,/**/
-								0.5,1,0.5,/**/0.5,0.5,1,/**/0.5,1,1,/**/
-								1,0.5,1,/**/1,1,0.5,/**/1,1,1};				//27 combinaciones
+

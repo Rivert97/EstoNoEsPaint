@@ -1,5 +1,15 @@
 #include "funciones.h"
 
+//_______________________________________________________________________ Paleta de colores
+const float PaletaColor[27][3] = {0,0,0,/**/0,0,0.5,/**/0,0,1,/**/
+								0,1,1,/**/0,0.5,1,/**/0,0.5,0.5,/**/
+								0,1,0.5,/**/0,1,0,/**/0,0.5,0,/**/
+								1,0,0.5,/**/0.5,0,1,/**/1,0,1,/**/
+								0.5,0.5,0,/**/1,0.5,0,/**/0.5,1,0,/**/
+								1,1,0,/**/0.5,0.5,0.5,/**/1,0.5,0.5,/**/
+								0.5,1,0.5,/**/0.5,0.5,1,/**/0.5,1,1,/**/
+								1,0.5,1,/**/1,1,0.5,/**/1,1,1};				//27 combinaciones
+
 //____________________________________________________________ Funciones extras
 
 
@@ -7,6 +17,7 @@ void AsignaColor(COLOR color)
 {
 	glColor3f(PaletaColor[color][0],PaletaColor[color][1],PaletaColor[color][2]);
 }
+
 
 //___________________________________________________________ Dibujado de objetos
 
@@ -51,7 +62,7 @@ void PoligonoI(POLIGONOi *p)
 
 void Circulo(CIRCULO *c)
 {
-	float x,y;
+	/*float x,y;
 	glBegin(GL_LINE_STRIP);
 	for(x=-1*(c->r+c->x0); x <= c->r+c->x0; x+=0.1)
 	{
@@ -63,9 +74,9 @@ void Circulo(CIRCULO *c)
 		y = -sqrt(c->r*c->r - (x-c->x0)*(x-c->x0))+c->y0;
 		glVertex2f(x,y);
 	}
-	glEnd();
+	glEnd();*/
 
-	/*float th, x, y;
+	float th, x, y;
 	glBegin(GL_LINE_LOOP);
 	for(th=0;th<=360; th+=1)
 	{
@@ -73,7 +84,7 @@ void Circulo(CIRCULO *c)
 		y = c->r * sin(th/180.0 * PI) + c->y0;
 		glVertex2f(x,y);
 	}
-	glEnd();*/
+	glEnd();
 }
 
 void Elipse(ELIPSE *e)
