@@ -6,18 +6,27 @@ const float PaletaColor[27][3] = {0,0,0,/**/0,0,0.5,/**/0,0,1,/**/
 								0,1,0.5,/**/0,1,0,/**/0,0.5,0,/**/
 								1,0,0.5,/**/0.5,0,1,/**/1,0,1,/**/
 								0.5,0.5,0,/**/1,0.5,0,/**/0.5,1,0,/**/
-								1,1,0,/**/0.5,0.5,0.5,/**/1,0.5,0.5,/**/
+								1,1,0,/**/0.5,0.5,0.5,/**/0.75,0.75,0.75,/**/1,0.5,0.5,/**/
 								0.5,1,0.5,/**/0.5,0.5,1,/**/0.5,1,1,/**/
 								1,0.5,1,/**/1,1,0.5,/**/1,1,1};				//27 combinaciones
 
 //____________________________________________________________ Funciones extras
-
-
 void AsignaColor(COLOR color)
 {
 	glColor3f(PaletaColor[color][0],PaletaColor[color][1],PaletaColor[color][2]);
 }
 
+void TopBar()
+{
+	AsignaColor(GRIS_CLARO);
+	glRectf(0,0,ANCHO,TOP_BAR);
+}
+
+void SideBar()
+{
+	AsignaColor(GRIS_CLARO);
+	glRectf(0,0,SIDE_BAR,ALTO);
+}
 
 //___________________________________________________________ Dibujado de objetos
 

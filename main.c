@@ -8,16 +8,16 @@ int main(int argc, char** argv)
 	//CONFIGURACIONES INICIALES
 	glutInit(&argc, argv);
 	glutInitWindowPosition(0,0);
-	glutInitWindowSize(1300,700);
+	glutInitWindowSize(ANCHO,ALTO);
 	glutCreateWindow("Esto no es PAINT");
 	glClearColor(1,1,1,0);
 
 	glMatrixMode(GL_PROJECTION);
-	gluOrtho2D(0,1300,700,0);		//Se deben cambiar
+	gluOrtho2D(0,ANCHO,ALTO,0);		//Se deben cambiar
 
 	//ASIGNACIÓN DE CALLBACKS
 	glutDisplayFunc(&display);
-	//glutMouseFunc(&Mouse);
+	glutMouseFunc(&Mouse);
 	glutMotionFunc(&ActiveMouse);
 	glutPassiveMotionFunc(&PassiveMouse);
 
@@ -31,7 +31,8 @@ void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	
+	TopBar();
+	SideBar();
 
 	glFlush();
 }

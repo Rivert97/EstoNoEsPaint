@@ -3,8 +3,10 @@
 #include <stdio.h>
 #include <math.h>
 #define PI 3.14159265
-#define MAX_CUADROS 5
-#define TOTAL_PUNTOS 500
+#define ANCHO 1300
+#define ALTO 700
+#define TOP_BAR 30
+#define SIDE_BAR 30
 
 //__________________________________________________Estructuras
 typedef struct{			//Estructura punto (x,y)
@@ -72,10 +74,11 @@ typedef enum{			//Enumeración de colores
 	MORADO,
 	MAGENTA,
 	ORO,
+	GRIS,
+	GRIS_CLARO,
 	ANARANJADO,
 	VERDE_CLARO,
 	AMARILLO,
-	GRIS,
 	ROSA_MEXICANO,
 	VERDE_PASTEL,
 	AZUL_PASTEL,
@@ -102,5 +105,7 @@ void Elipse(ELIPSE *e);
 void DibujarTexto(char *text, float x, float y);
 //Extras
 void AsignaColor(COLOR color);
+void TopBar();
+void SideBar();
 
 
