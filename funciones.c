@@ -7,9 +7,29 @@ const float PaletaColor[28][3] = {0,0,0,/**/0,0,0.5,/**/0,0,1,/**/
 								0.5,0,0,/**/1,0,0,/**/0.5,0,0.5,/**/
 								1,0,0.5,/**/0.5,0,1,/**/1,0,1,/**/
 								0.5,0.5,0,/**/1,0.5,0,/**/0.5,1,0,/**/
-								1,1,0,/**/0.5,0.5,0.5,/**/0.95,0.95,0.95,/**/1,0.5,0.5,/**/
+								1,1,0,/**/0.5,0.5,0.5,/**/0.75,0.75,0.75,/**/1,0.5,0.5,/**/
 								0.5,1,0.5,/**/0.5,0.5,1,/**/0.5,1,1,/**/
 								1,0.5,1,/**/1,1,0.5,/**/1,1,1};					//27 combinaciones
+
+
+void Push(LISTA** lista, LISTA** elemento)
+{
+	LISTA* aux;
+
+	if(*lista == NULL)
+	{
+		*lista = *elemento;
+	}
+	else
+	{
+		aux = *lista;
+
+		while(aux->s != NULL)
+			aux = aux->s;
+		
+		aux->s = *elemento;
+	}
+}
 
 //____________________________________________________________ Funciones extras
 void AsignaColor(COLOR color)
@@ -29,7 +49,147 @@ void SideBar()
 	glRectf(0,0,SIDE_BAR,ALTO);
 }
 
+//_______________________________________________ Creacion de figuras
+CUADRADO* CrearCuadrado(int x, int y, OPCIONES op)
+{
+	CUADRADO *aux;
+
+	aux = (CUADRADO*)malloc(sizeof(CUADRADO));
+	aux->x = x;
+	aux->y = y;
+	aux->l = 10;
+
+	return aux;
+}
+
+RECTANGULO* CrearRectangulo(int x, int y, OPCIONES op)
+{
+	RECTANGULO *aux;
+
+	aux = (RECTANGULO*)malloc(sizeof(RECTANGULO));
+	aux->x = x;
+	aux->y = y;
+	aux->ancho = 20;
+	aux->alto = 50;
+
+	return aux;
+}
+
+CIRCULO* CrearCirculo(int x, int y, OPCIONES op)
+{
+	CIRCULO *aux;
+
+	aux = (CIRCULO*)malloc(sizeof(CIRCULO));
+	aux->x0 = x;
+	aux->y0 = y;
+	aux->r = 10;
+
+	return aux;
+}
+
+LINEA* CrearLinea(int x, int y, OPCIONES op)
+{
+	LINEA *aux;
+
+	aux = (LINEA*)malloc(sizeof(LINEA));
+	aux->xi = x;
+	aux->yi = y;
+	aux->xf = x+10;
+	aux->yf = y+10;
+
+	return aux;
+}
+
+ELIPSE* CrearElipse(int x, int y, OPCIONES op)
+{
+	ELIPSE *aux;
+
+	aux = (ELIPSE*)malloc(sizeof(ELIPSE));
+	aux->x0 = x;
+	aux->y0 = y;
+	aux->a = 10;
+	aux->b = 20;
+	aux->th = 0;
+
+	return aux;
+}
+
+POLIGONOi* CrearPoligonoi(int x, int y, OPCIONES op)
+{
+	POLIGONOi *aux;
+
+	aux = (POLIGONOi*)malloc(sizeof(POLIGONOi));
+	aux->numL = 5;
+	aux->v = (PUNTO*)malloc(sizeof(PUNTO)*aux->numL);
+	aux->v[0].x = x;
+	aux->v[0].y = y;
+	aux->v[1].x = x+10;
+	aux->v[1].y = y+10;
+	aux->v[2].x = x+20;
+	aux->v[2].y = y;
+	aux->v[3].x = x+15;
+	aux->v[3].y = y-10;
+	aux->v[4].x = x+5;
+	aux->v[4].y = y-10;
+
+	return aux;
+}
+
+PUNTO* CrearPunto(int x, int y, OPCIONES op)
+{
+	PUNTO *aux;
+
+	aux = (PUNTO*)malloc(sizeof(PUNTO));
+	aux->x = x;
+	aux->y = y;
+
+	return aux;
+}
+
+
 //___________________________________________________________ Dibujado de objetos
+void Dibujar(LISTA* l)
+{
+	switch(l->tipo){
+		case 's':
+			Cuadrado((CUADRADO*)(l->figura));
+			break;
+		
+		case 'r':
+			Rectangulo((RECTANGULO*)(l->figura));
+			break;
+		
+		case 'c':
+			Circulo((CIRCULO*)(l->figura));
+			break;
+
+		case 'l':
+			Linea((LINEA*)(l->figura));
+			break;
+
+		case 'e':
+			Elipse((ELIPSE*)(l->figura));
+			break;
+
+		case 'p':
+			PoligonoI((POLIGONOi*)(l->figura));
+			break;
+
+		case 'd':
+			Punto((PUNTO*)(l->figura));
+			break;
+
+		default:
+			break;
+	}
+}
+
+void Punto(PUNTO *p)
+{
+	glBegin(GL_POINTS);
+	glVertex2f(p->x, p->y);
+	glEnd();	
+}
 
 void Linea(LINEA *l)
 {
@@ -41,22 +201,12 @@ void Linea(LINEA *l)
 
 void Cuadrado(CUADRADO *c)
 {
-	glBegin(GL_LINE_LOOP);
-	glVertex2f(c->x,c->y);
-	glVertex2f(c->x+c->l,c->y);
-	glVertex2f(c->x+c->l,c->y-c->l);
-	glVertex2f(c->x,c->y-c->l);
-	glEnd();
+	glRectf(c->x, c->y, c->x+c->l, c->y+c->l);
 }
 
 void Rectangulo(RECTANGULO *r)
 {
-	glBegin(GL_LINE_LOOP);
-	glVertex2f(r->x,r->y);
-	glVertex2f(r->x+r->ancho,r->y);
-	glVertex2f(r->x+r->ancho,r->y-r->alto);
-	glVertex2f(r->x,r->y-r->alto);
-	glEnd();
+	glRectf(r->x, r->y, r->x+r->ancho, r->y+r->alto);
 }
 
 void PoligonoI(POLIGONOi *p)

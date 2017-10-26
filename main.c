@@ -1,7 +1,9 @@
 #include "funciones.h"
 
 //_________________________________________________ Variables globales
-
+LISTA *cabeza, *actual;
+OPCIONES op;
+char tipo='s';
 
 int main(int argc, char** argv)
 {
@@ -13,7 +15,7 @@ int main(int argc, char** argv)
 	glClearColor(1,1,1,0);
 
 	glMatrixMode(GL_PROJECTION);
-	gluOrtho2D(0,ANCHO,ALTO,0);		//Se deben cambiar
+	gluOrtho2D(0,ANCHO,ALTO,0);
 
 	//ASIGNACIÓN DE CALLBACKS
 	glutDisplayFunc(&display);
@@ -21,6 +23,12 @@ int main(int argc, char** argv)
 	glutMotionFunc(&ActiveMouse);
 	glutPassiveMotionFunc(&PassiveMouse);
 
+	//Inicialización de variables
+	cabeza = NULL;
+	op.color = BLANCO;
+	op.tipo_linea = 0xFFFF;
+	op.tipo = 'f';
+	op.ancho = 1;
 
 	//ESTADO DE ESPERA DE EVENTOS
 	glutMainLoop();
@@ -29,24 +37,85 @@ int main(int argc, char** argv)
 
 void display()
 {
-	int i;
+	LISTA* aux;
+	aux = cabeza;
+
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	//__________________________________ Barras de herramientas
 	TopBar();
 	SideBar();
 
-	for(i=0;i<28;i++)
+	//________________________________ Dibujar figuras del usuario
+	AsignaColor(ROJO);
+	while(aux != NULL)
 	{
-		AsignaColor(i);
-		glRectf(40+5*i,40,100+5*i,100);
+		Dibujar(aux);
+		aux = aux->s;
 	}
+
 
 	glFlush();
 }
 
 void Mouse(int button, int state, int x, int y)
 {
-	
+	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		LISTA* aux;
+		aux = (LISTA*)malloc(sizeof(LISTA));
+		aux->tipo = tipo;
+		aux->s = NULL;
+
+		switch(tipo){
+			case 's':
+				aux->figura = (void*)CrearCuadrado(x, y, op);
+				break;
+			
+			case 'r':
+				aux->figura = (void*)CrearRectangulo(x, y, op);
+				break;
+			
+			case 'c':
+				aux->figura = (void*)CrearCirculo(x, y, op);
+				break;
+
+			case 'l':
+				aux->figura = (void*)CrearLinea(x, y, op);
+				break;
+
+			case 'e':
+				aux->figura = (void*)CrearElipse(x, y, op);
+				break;
+
+			case 'p':
+				aux->figura = (void*)CrearPoligonoi(x, y, op);
+				break;
+
+			case 'd':
+				aux->figura = (void*)CrearPunto(x, y, op);
+				break;
+
+			default:
+				break;
+		}
+
+		Push(&cabeza, &aux);
+		glutPostRedisplay();
+	}
+	else if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+	{
+		LISTA* aux;
+		while(cabeza != NULL)
+		{
+			aux = cabeza;
+			cabeza = cabeza->s;
+			free(aux->figura);
+			free(aux);
+		}
+		glutPostRedisplay();
+		tipo = 'r';
+	}
 }
 
 void ActiveMouse(int x, int y)
