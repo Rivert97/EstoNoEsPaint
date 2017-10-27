@@ -54,6 +54,11 @@ void display()
 		aux = aux->s;
 	}
 
+	/*glPointSize(5);
+	glBegin(GL_POINTS);
+	glVertex2f(ANCHO/2, ALTO/2);
+	glEnd();
+	glPointSize(1);*/
 
 	glFlush();
 }

@@ -60,6 +60,7 @@ void TopBar()
 void SideBar()
 {
 	int i;
+	float th, x, y;
 	//___________________________ fondo
 	AsignaColor(GRIS_CLARO);
 	glRectf(0,0,SIDE_BAR,ALTO);
@@ -68,7 +69,73 @@ void SideBar()
 	for(i = 0; i < 7; i++)
 	{
 		glColor3f(0.90, 0.90, 0.90);
-		glRectf(5, TOP_BAR+20*i, 25, TOP_BAR+20*(i+1));
+		glRectf(5, TOP_BAR+20*i+(i*10), 25, TOP_BAR+20*(i+1)+(i*10));
+glPointSize(5);
+				glBegin(GL_POINTS);
+				glVertex2f(15, TOP_BAR+20*i+(i*10)+10);
+				glEnd();
+				glPointSize(1);
+		AsignaColor(NEGRO);
+		glPolygonMode(GL_BACK, GL_LINE);
+		glBegin(GL_POLYGON);
+		switch(i)
+		{
+			case 0: //punto
+				glPointSize(5);
+				glBegin(GL_POINTS);
+				glVertex2f(15, TOP_BAR+20*i+(i*10)+10);
+				glEnd();
+				glPointSize(1);
+				printf("%d\n", TOP_BAR+20*i+(i*10)+10);
+				break;
+			case 1://Cuadrado
+				glVertex2f(8, TOP_BAR+20*i+(i*10)+3);
+				glVertex2f(23, TOP_BAR+20*i+(i*10)+3);
+				glVertex2f(23, TOP_BAR+20*(i+1)+(i*10)-3);
+				glVertex2f(8, TOP_BAR+20*(i+1)+(i*10)-3);
+				break;
+
+			case 2://Rectangulo
+				glVertex2f(8, TOP_BAR+20*i+(i*10)+6);
+				glVertex2f(23, TOP_BAR+20*i+(i*10)+6);
+				glVertex2f(23, TOP_BAR+20*(i+1)+(i*10)-6);
+				glVertex2f(8, TOP_BAR+20*(i+1)+(i*10)-6);
+				break;
+
+			case 3:	//Triangulo
+				glVertex2f(8, TOP_BAR+20*(i+1)+(i*10)-3);
+				glVertex2f(15, TOP_BAR+20*i+(i*10)+3);
+				glVertex2f(23, TOP_BAR+20*(i+1)+(i*10)-3);
+				break;
+
+			case 4:	//Circulo
+				glBegin(GL_LINE_LOOP);
+				for(th=0;th<=360; th+=1)
+				{
+					x = 9 * cos(th/180.0 * PI) + 15;
+					y = 9 * sin(th/180.0 * PI) + TOP_BAR+20*i+(i*10)+10;
+					glVertex2f(x,y);
+				}
+				glEnd();
+				break;
+
+			case 5:	//Elipse
+				glBegin(GL_LINE_LOOP);
+				for(th=0; th<360; th+=1)
+				{
+					x = 9*cos(th/180.0*PI) + 15;
+					y = 6*sin(th/180.0*PI) + TOP_BAR+20*i+(i*10)+10;
+					glVertex2f(x,y);
+				}
+				glEnd();
+				break;
+
+			case 6:
+
+				break;
+		}
+		glEnd();
+		glPolygonMode(GL_BACK, GL_FILL);
 	}
 }
 
