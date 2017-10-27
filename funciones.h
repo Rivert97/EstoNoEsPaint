@@ -6,7 +6,7 @@
 #define ANCHO 1200
 #define ALTO 600
 #define TOP_BAR 30
-#define SIDE_BAR 40
+#define SIDE_BAR 30
 
 
 typedef enum{			//Enumeración de colores

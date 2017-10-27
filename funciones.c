@@ -59,8 +59,17 @@ void TopBar()
 
 void SideBar()
 {
+	int i;
+	//___________________________ fondo
 	AsignaColor(GRIS_CLARO);
 	glRectf(0,0,SIDE_BAR,ALTO);
+
+	//___________________________ Figuras
+	for(i = 0; i < 7; i++)
+	{
+		glColor3f(0.90, 0.90, 0.90);
+		glRectf(5, TOP_BAR+20*i, 25, TOP_BAR+20*(i+1));
+	}
 }
 
 //_______________________________________________ Creacion de figuras
