@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <math.h>
 #define PI 3.14159265
-#define ANCHO 1300
-#define ALTO 700
+#define ANCHO 1200
+#define ALTO 600
 #define TOP_BAR 30
-#define SIDE_BAR 30
+#define SIDE_BAR 40
 
 
 typedef enum{			//Enumeración de colores

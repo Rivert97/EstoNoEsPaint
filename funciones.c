@@ -39,8 +39,22 @@ void AsignaColor(COLOR color)
 
 void TopBar()
 {
+	int i;
+	//__________________________ Fondo
 	AsignaColor(GRIS_CLARO);
 	glRectf(0,0,ANCHO,TOP_BAR);
+
+	//_________________________Paleta colores
+	for(i = 0; i < 14; i++)
+	{
+		AsignaColor(i);
+		glRectf(SIDE_BAR+15*i, 0, SIDE_BAR+15*(i+1), 15);
+	}
+	for(i = 0; i < 14; i++)
+	{
+		AsignaColor(i+14);
+		glRectf(SIDE_BAR+15*i, 15, SIDE_BAR+15*(i+1), 30);
+	}
 }
 
 void SideBar()
