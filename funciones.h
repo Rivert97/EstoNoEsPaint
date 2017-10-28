@@ -158,8 +158,8 @@ void Punto(PUNTO *p);
 void DibujarTexto(char *text, float x, float y);
 //Extras
 void AsignaColor(COLOR color);
-void TopBar(BOTON* topBar);
-void SideBar(BOTON* sideBar);
+void TopBar(BOTON* topBarB);
+void SideBar(BOTON* sideBarB);
 void Push(LISTA** lista, LISTA** elemento);
 //Creacion de figuras
 CUADRADO* CrearCuadrado(int x, int y, OPCIONES op);

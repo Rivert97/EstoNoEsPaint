@@ -3,8 +3,8 @@
 //_________________________________________________ Variables globales
 LISTA *cabeza, *actual;
 OPCIONES op;
-BOTON topBar[28];
-BOTON sideBar[8];
+BOTON topBarB[28];
+BOTON sideBarB[8];
 
 int main(int argc, char** argv)
 {
@@ -44,8 +44,8 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//__________________________________ Barras de herramientas
-	TopBar(topBar);
-	SideBar(sideBar);
+	TopBar(topBarB);
+	SideBar(sideBarB);
 
 	//________________________________ Dibujar figuras del usuario
 	AsignaColor(ROJO);

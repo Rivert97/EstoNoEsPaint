@@ -37,7 +37,7 @@ void AsignaColor(COLOR color)
 	glColor3f(PaletaColor[color][0],PaletaColor[color][1],PaletaColor[color][2]);
 }
 
-void TopBar(BOTON* topBar)
+void TopBar(BOTON* topBarB)
 {
 	int i;
 	//__________________________ Fondo
@@ -47,28 +47,28 @@ void TopBar(BOTON* topBar)
 	//_________________________Paleta colores
 	for(i = 0; i < 14; i++)
 	{
-		//_______________________ llenar caracteriasticas del boton
-		topBar[i].xl = SIDE_BAR+15*i;
-		topBar[i].yl = 0;
-		topBar[i].xr = SIDE_BAR+15*(i+1);
-		topBar[i].yr = 15;
-		topBar[i].id = i;
+		//_______________________ llenar caracteriasticas de los botones
+		topBarB[i].xl = SIDE_BAR+15*i;
+		topBarB[i].yl = 0;
+		topBarB[i].xr = SIDE_BAR+15*(i+1);
+		topBarB[i].yr = 15;
+		topBarB[i].id = i;
 
-		topBar[i+14].xl = SIDE_BAR+15*i;
-		topBar[i+14].yl = 15;
-		topBar[i+14].xr = SIDE_BAR+15*(i+1);
-		topBar[i+14].yr = 30;
-		topBar[i+14].id = i+14;
+		topBarB[i+14].xl = SIDE_BAR+15*i;
+		topBarB[i+14].yl = 15;
+		topBarB[i+14].xr = SIDE_BAR+15*(i+1);
+		topBarB[i+14].yr = 30;
+		topBarB[i+14].id = i+14;
 
-		//_______________________ dibujar cuadro
+		//_______________________ dibujar cuadros
 		AsignaColor(i);
-		glRectf(topBar[i].xl, topBar[i].yl, topBar[i].xr, topBar[i].yr);
+		glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);
 		AsignaColor(i+14);
-		glRectf(topBar[i+14].xl, topBar[i+14].yl, topBar[i+14].xr, topBar[i+14].yr);
+		glRectf(topBarB[i+14].xl, topBarB[i+14].yl, topBarB[i+14].xr, topBarB[i+14].yr);
 	}
 }
 
-void SideBar(BOTON* sideBar)
+void SideBar(BOTON* sideBarB)
 {
 	int i;
 	float th, x, y;
@@ -79,44 +79,53 @@ void SideBar(BOTON* sideBar)
 	//___________________________ Figuras
 	for(i = 0; i < 8; i++)
 	{
+		//______________________________ Llenando caracteriasticas del boton
+		sideBarB[i].xl = 5;
+		sideBarB[i].yl = TOP_BAR+20*i+(i*10);
+		sideBarB[i].xr = 25;
+		sideBarB[i].yr = TOP_BAR+20*(i+1)+(i*10);
+
+		//_________________________________ Dibujar fondo
 		glColor3f(0.90, 0.90, 0.90);
-		glRectf(5, TOP_BAR+20*i+(i*10), 25, TOP_BAR+20*(i+1)+(i*10));
+		glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
 
 		AsignaColor(NEGRO);
-		glPolygonMode(GL_BACK, GL_LINE);
+		glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
+		
+		//________________________________ Dibujar figuras internas
 		switch(i)
 		{
 			case 0: //punto
 				glPointSize(3);
 				glBegin(GL_POINTS);
-				glVertex2f(15, TOP_BAR+20*i+(i*10)+10);
+				glVertex2f(sideBarB[i].xl + (sideBarB[i].xr - sideBarB[i].xl)/2, sideBarB[i].yl + (sideBarB[i].yr - sideBarB[i].yl)/2);
 				glEnd();
 				glPointSize(1);
 				glEnd();
 				break;
 			case 1://Cuadrado
 				glBegin(GL_POLYGON);
-				glVertex2f(8, TOP_BAR+20*i+(i*10)+3);
-				glVertex2f(23, TOP_BAR+20*i+(i*10)+3);
-				glVertex2f(23, TOP_BAR+20*(i+1)+(i*10)-3);
-				glVertex2f(8, TOP_BAR+20*(i+1)+(i*10)-3);
+				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 3);
+				glVertex2f(sideBarB[i].xr - 3, sideBarB[i].yl + 3);
+				glVertex2f(sideBarB[i].xr - 3, sideBarB[i].yr - 3);
+				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yr - 3);
 				glEnd();
 				break;
 
 			case 2://Rectangulo
 				glBegin(GL_POLYGON);
-				glVertex2f(8, TOP_BAR+20*i+(i*10)+6);
-				glVertex2f(23, TOP_BAR+20*i+(i*10)+6);
-				glVertex2f(23, TOP_BAR+20*(i+1)+(i*10)-6);
-				glVertex2f(8, TOP_BAR+20*(i+1)+(i*10)-6);
+				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 6);
+				glVertex2f(sideBarB[i].xr - 3, sideBarB[i].yl + 6);
+				glVertex2f(sideBarB[i].xr - 3, sideBarB[i].yr - 6);
+				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yr - 6);
 				glEnd();
 				break;
 
 			case 3:	//Triangulo
 				glBegin(GL_POLYGON);
-				glVertex2f(8, TOP_BAR+20*(i+1)+(i*10)-3);
-				glVertex2f(15, TOP_BAR+20*i+(i*10)+3);
-				glVertex2f(23, TOP_BAR+20*(i+1)+(i*10)-3);
+				glVertex2f(sideBarB[i].xl + 3, TOP_BAR+20*(i+1)+(i*10)-3);
+				glVertex2f(sideBarB[i].xl + (sideBarB[i].xr - sideBarB[i].xl)/2, sideBarB[i].yl + 3);
+				glVertex2f(sideBarB[i].xr - 3, sideBarB[i].yr - 3);
 				glEnd();
 				break;
 
@@ -124,8 +133,8 @@ void SideBar(BOTON* sideBar)
 				glBegin(GL_LINE_LOOP);
 				for(th=0;th<=360; th+=1)
 				{
-					x = 9 * cos(th/180.0 * PI) + 15;
-					y = 9 * sin(th/180.0 * PI) + TOP_BAR+20*i+(i*10)+10;
+					x = 9 * cos(th/180.0 * PI) + sideBarB[i].xl + (sideBarB[i].xr - sideBarB[i].xl)/2;
+					y = 9 * sin(th/180.0 * PI) + sideBarB[i].yl + (sideBarB[i].yr - sideBarB[i].yl)/2;
 					glVertex2f(x,y);
 				}
 				glEnd();
@@ -135,16 +144,31 @@ void SideBar(BOTON* sideBar)
 				glBegin(GL_LINE_LOOP);
 				for(th=0; th<360; th+=1)
 				{
-					x = 9*cos(th/180.0*PI) + 15;
-					y = 6*sin(th/180.0*PI) + TOP_BAR+20*i+(i*10)+10;
+					x = 9*cos(th/180.0*PI) + sideBarB[i].xl + (sideBarB[i].xr - sideBarB[i].xl)/2;
+					y = 6*sin(th/180.0*PI) + sideBarB[i].yl + (sideBarB[i].yr - sideBarB[i].yl)/2;
 					glVertex2f(x,y);
 				}
 				glEnd();
 				break;
 
-			case 6:
+			case 6:	//Pentagono
 				glBegin(GL_POLYGON);
+				glVertex2f(sideBarB[i].xl + (sideBarB[i].xr - sideBarB[i].xl)/2, sideBarB[i].yl + 2);
+				glVertex2f(sideBarB[i].xr - 2, sideBarB[i].yl + 8);
+				glVertex2f(sideBarB[i].xr - 6, sideBarB[i].yr - 2);
+				glVertex2f(sideBarB[i].xl + 6, sideBarB[i].yr - 2);
+				glVertex2f(sideBarB[i].xl + 2, sideBarB[i].yl + 8);
+				glEnd();
+				break;
 
+			case 7:	//Hexágono
+				glBegin(GL_POLYGON);
+				glVertex2f(sideBarB[i].xl + 6, sideBarB[i].yl + 3);
+				glVertex2f(sideBarB[i].xr - 6, sideBarB[i].yl + 3);
+				glVertex2f(sideBarB[i].xr - 2, sideBarB[i].yl + (sideBarB[i].yr - sideBarB[i].yl)/2);
+				glVertex2f(sideBarB[i].xr - 6, sideBarB[i].yr - 2);
+				glVertex2f(sideBarB[i].xl + 6, sideBarB[i].yr - 2);
+				glVertex2f(sideBarB[i].xl + 2, sideBarB[i].yl + (sideBarB[i].yr - sideBarB[i].yl)/2);
 				glEnd();
 				break;
 		}
