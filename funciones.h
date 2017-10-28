@@ -7,6 +7,8 @@
 #define ALTO 600
 #define TOP_BAR 30
 #define SIDE_BAR 30
+#define NSIDE_BAR_B 8
+#define NTOP_BAR_B 28
 
 
 typedef enum{			//Enumeración de colores
@@ -115,8 +117,19 @@ typedef struct				//Estructura elipse
 	int ancho_linea;
 }ELIPSE;
 
+typedef struct 				//Estructura triangulo
+{
+	float x;
+	float y;
+	float lado;
+	COLOR color;
+	char tipo_linea;
+	char tipo;
+	int ancho_linea;
+}TRIANGULO;
+
 //Lista enlazada
-typedef struct LISTA 
+typedef struct LISTA
 {
 	void* figura;
 	char tipo;			//s->cuadrado, e->elipse, c->circulo, p->pentagono, h->hexagono, r->rectangulo, l->linea, d->punto
@@ -155,12 +168,15 @@ void PoligonoI(POLIGONOi *p);
 void Circulo(CIRCULO *c);
 void Elipse(ELIPSE *e);
 void Punto(PUNTO *p);
+void Triangulo(TRIANGULO* t);
 void DibujarTexto(char *text, float x, float y);
 //Extras
 void AsignaColor(COLOR color);
 void TopBar(BOTON* topBarB);
 void SideBar(BOTON* sideBarB);
 void Push(LISTA** lista, LISTA** elemento);
+int ClickBar(BOTON* botones, int size, int x, int y);
+int ClickBoton(BOTON boton, int x, int y);
 //Creacion de figuras
 CUADRADO* CrearCuadrado(int x, int y, OPCIONES op);
 RECTANGULO* CrearRectangulo(int x, int y, OPCIONES op);
@@ -169,4 +185,5 @@ LINEA* CrearLinea(int x, int y, OPCIONES op);
 ELIPSE* CrearElipse(int x, int y, OPCIONES op);
 POLIGONOi* CrearPoligonoi(int x, int y, OPCIONES op);
 PUNTO* CrearPunto(int x, int y, OPCIONES op);
+TRIANGULO* CrearTriangulo(int x, int y, OPCIONES op);
 

@@ -3,8 +3,8 @@
 //_________________________________________________ Variables globales
 LISTA *cabeza, *actual;
 OPCIONES op;
-BOTON topBarB[28];
-BOTON sideBarB[8];
+BOTON topBarB[NTOP_BAR_B];
+BOTON sideBarB[NSIDE_BAR_B];
 
 int main(int argc, char** argv)
 {
@@ -60,62 +60,126 @@ void display()
 
 void Mouse(int button, int state, int x, int y)
 {
-	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	if(x > SIDE_BAR && y > TOP_BAR)	//Click dentro de pantalla de dibujo
 	{
-		LISTA* aux;
-		aux = (LISTA*)malloc(sizeof(LISTA));
-		aux->tipo = op.tipo;
-		aux->s = NULL;
-
-		switch(op.tipo){
-			case 's':
-				aux->figura = (void*)CrearCuadrado(x, y, op);
-				break;
-			
-			case 'r':
-				aux->figura = (void*)CrearRectangulo(x, y, op);
-				break;
-			
-			case 'c':
-				aux->figura = (void*)CrearCirculo(x, y, op);
-				break;
-
-			case 'l':
-				aux->figura = (void*)CrearLinea(x, y, op);
-				break;
-
-			case 'e':
-				aux->figura = (void*)CrearElipse(x, y, op);
-				break;
-
-			case 'p':
-				aux->figura = (void*)CrearPoligonoi(x, y, op);
-				break;
-
-			case 'd':
-				aux->figura = (void*)CrearPunto(x, y, op);
-				break;
-
-			default:
-				break;
-		}
-
-		Push(&cabeza, &aux);
-		glutPostRedisplay();
-	}
-	else if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-	{
-		LISTA* aux;
-		while(cabeza != NULL)
+		if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 		{
-			aux = cabeza;
-			cabeza = cabeza->s;
-			if(aux->tipo == 'p')
-				free(((POLIGONOi*)(aux->figura))->v);
-			free(aux->figura);
-			free(aux);
+			LISTA* aux;
+			aux = (LISTA*)malloc(sizeof(LISTA));
+			aux->tipo = op.tipo;
+			aux->s = NULL;
+
+			switch(op.tipo){
+				case 's':
+					aux->figura = (void*)CrearCuadrado(x, y, op);
+					break;
+				
+				case 'r':
+					aux->figura = (void*)CrearRectangulo(x, y, op);
+					break;
+				
+				case 'c':
+					aux->figura = (void*)CrearCirculo(x, y, op);
+					break;
+
+				case 'l':
+					aux->figura = (void*)CrearLinea(x, y, op);
+					break;
+
+				case 'e':
+					aux->figura = (void*)CrearElipse(x, y, op);
+					break;
+
+				case 'p':
+					aux->figura = (void*)CrearPoligonoi(x, y, op);
+					break;
+
+				case 'h':
+					aux->figura = (void*)CrearPoligonoi(x, y, op);
+					break;
+
+				case 'd':
+					aux->figura = (void*)CrearPunto(x, y, op);
+					break;
+
+				case 't':
+					aux->figura = (void*)CrearTriangulo(x, y, op);
+					break;
+
+				default:
+					break;
+			}
+
+			Push(&cabeza, &aux);
+			glutPostRedisplay();
 		}
-		glutPostRedisplay();
+		else if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+		{
+			LISTA* aux;
+			while(cabeza != NULL)
+			{
+				aux = cabeza;
+				cabeza = cabeza->s;
+				/*if(aux->tipo == 'p' || aux->tipo == 'h')	//Si es poligono eliminar v
+					free(((POLIGONOi*)(aux->figura))->v);
+				free(aux->figura);*/
+
+				switch(aux->tipo){
+					case 's':
+						free((CUADRADO*)(aux->figura));
+						break;
+					
+					case 'r':
+						free((RECTANGULO*)(aux->figura));
+						break;
+					
+					case 'c':
+						free((CIRCULO*)(aux->figura));
+						break;
+
+					case 'l':
+						free((LINEA*)(aux->figura));
+						break;
+
+					case 'e':
+						free((ELIPSE*)(aux->figura));
+						break;
+
+					case 'p':
+						free(((POLIGONOi*)(aux->figura))->v);
+						free((POLIGONOi*)(aux->figura));
+						break;
+
+					case 'h':
+						free(((POLIGONOi*)(aux->figura))->v);
+						free((POLIGONOi*)(aux->figura));
+						break;
+
+					case 'd':
+						free((PUNTO*)(aux->figura));
+						break;
+
+					case 't':
+						free((TRIANGULO*)(aux->figura));
+						break;
+
+					default:
+						break;
+				}
+				free(aux);
+			}
+			glutPostRedisplay();
+		}
+	}
+	else if(x < SIDE_BAR && y > TOP_BAR)	//Click en barra de la izquierda
+	{
+		int index;
+		index = ClickBar(sideBarB, NSIDE_BAR_B, x, y);
+		op.tipo = sideBarB[index].id;
+	}
+	else 	//Click en la barra de arriba
+	{
+
 	}
 }
 

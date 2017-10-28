@@ -184,6 +184,28 @@ void SideBar(BOTON* sideBarB)
 	}
 }
 
+int ClickBoton(BOTON boton, int x, int y)
+{
+	if(x > boton.xl && x < boton.xr)
+		if(y > boton.yl && y < boton.yr)
+			return 1;
+
+	return 0;
+}
+
+int ClickBar(BOTON* botones, int size, int x, int y)	//Retorna el indice del boton
+{
+	int i;
+
+	for(i = 0; i < size; i++)
+	{
+		if(ClickBoton(botones[i], x, y) == 1)
+			return i;
+	}
+
+	return -1;
+}
+
 //_______________________________________________ Creacion de figuras
 CUADRADO* CrearCuadrado(int x, int y, OPCIONES op)
 {
@@ -281,6 +303,15 @@ PUNTO* CrearPunto(int x, int y, OPCIONES op)
 	return aux;
 }
 
+TRIANGULO* CrearTriangulo(int x, int y, OPCIONES op)
+{
+	TRIANGULO* aux;
+
+	aux = (TRIANGULO*)malloc(sizeof(TRIANGULO));
+	aux->x = x;
+	aux->y = y;
+	aux->lado = 10;
+}
 
 //___________________________________________________________ Dibujado de objetos
 void Dibujar(LISTA* l)
@@ -314,6 +345,12 @@ void Dibujar(LISTA* l)
 			Punto((PUNTO*)(l->figura));
 			break;
 
+		case 't':
+			Triangulo((TRIANGULO*)(l->figura));
+			break;
+
+		case 'h':
+			PoligonoI((POLIGONOi*)(l->figura));
 		default:
 			break;
 	}
@@ -324,6 +361,15 @@ void Punto(PUNTO *p)
 	glBegin(GL_POINTS);
 	glVertex2f(p->x, p->y);
 	glEnd();	
+}
+
+void Triangulo(TRIANGULO* t)
+{
+	glBegin(GL_POLYGON);
+	glVertex2f(t->x, t->y);
+	glVertex2f(t->x + t->lado/2, t->y + sqrt(3*(t->lado*t->lado)/4));
+	glVertex2f(t->x + t->lado, t->y);
+	glEnd();
 }
 
 void Linea(LINEA *l)
