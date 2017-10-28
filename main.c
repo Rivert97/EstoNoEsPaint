@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 
 	//Inicialización de variables
 	cabeza = NULL;
-	op.color = BLANCO;
+	op.color = NEGRO;
 	op.tipo_linea = 0xFFFF;
 	op.tipo = 's';
 	op.ancho = 1;
@@ -179,7 +179,9 @@ void Mouse(int button, int state, int x, int y)
 	}
 	else 	//Click en la barra de arriba
 	{
-
+		int index;
+		index = ClickBar(topBarB, NTOP_BAR_B, x, y);
+		op.color = topBarB[index].id;
 	}
 }
 

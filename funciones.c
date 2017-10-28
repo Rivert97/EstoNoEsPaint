@@ -215,6 +215,7 @@ CUADRADO* CrearCuadrado(int x, int y, OPCIONES op)
 	aux->x = x;
 	aux->y = y;
 	aux->l = 10;
+	aux->color = op.color;
 
 	return aux;
 }
@@ -228,6 +229,7 @@ RECTANGULO* CrearRectangulo(int x, int y, OPCIONES op)
 	aux->y = y;
 	aux->ancho = 20;
 	aux->alto = 50;
+	aux->color = op.color;
 
 	return aux;
 }
@@ -240,6 +242,7 @@ CIRCULO* CrearCirculo(int x, int y, OPCIONES op)
 	aux->x0 = x;
 	aux->y0 = y;
 	aux->r = 10;
+	aux->color = op.color;
 
 	return aux;
 }
@@ -253,6 +256,7 @@ LINEA* CrearLinea(int x, int y, OPCIONES op)
 	aux->yi = y;
 	aux->xf = x+10;
 	aux->yf = y+10;
+	aux->color = op.color;
 
 	return aux;
 }
@@ -267,6 +271,7 @@ ELIPSE* CrearElipse(int x, int y, OPCIONES op)
 	aux->a = 10;
 	aux->b = 20;
 	aux->th = 0;
+	aux->color = op.color;
 
 	return aux;
 }
@@ -288,6 +293,7 @@ POLIGONOi* CrearPoligonoi(int x, int y, OPCIONES op)
 	aux->v[3].y = y-10;
 	aux->v[4].x = x+5;
 	aux->v[4].y = y-10;
+	aux->color = op.color;
 
 	return aux;
 }
@@ -299,6 +305,7 @@ PUNTO* CrearPunto(int x, int y, OPCIONES op)
 	aux = (PUNTO*)malloc(sizeof(PUNTO));
 	aux->x = x;
 	aux->y = y;
+	aux->color = op.color;
 
 	return aux;
 }
@@ -311,6 +318,7 @@ TRIANGULO* CrearTriangulo(int x, int y, OPCIONES op)
 	aux->x = x;
 	aux->y = y;
 	aux->lado = 10;
+	aux->color = op.color;
 }
 
 //___________________________________________________________ Dibujado de objetos
@@ -358,6 +366,7 @@ void Dibujar(LISTA* l)
 
 void Punto(PUNTO *p)
 {
+	AsignaColor(p->color);
 	glBegin(GL_POINTS);
 	glVertex2f(p->x, p->y);
 	glEnd();	
@@ -365,6 +374,7 @@ void Punto(PUNTO *p)
 
 void Triangulo(TRIANGULO* t)
 {
+	AsignaColor(t->color);
 	glBegin(GL_POLYGON);
 	glVertex2f(t->x, t->y);
 	glVertex2f(t->x + t->lado/2, t->y + sqrt(3*(t->lado*t->lado)/4));
@@ -374,6 +384,7 @@ void Triangulo(TRIANGULO* t)
 
 void Linea(LINEA *l)
 {
+	AsignaColor(l->color);
 	glBegin(GL_LINES);
 	glVertex2f(l->xi, l->yi);
 	glVertex2f(l->xf, l->yf);
@@ -382,17 +393,20 @@ void Linea(LINEA *l)
 
 void Cuadrado(CUADRADO *c)
 {
+	AsignaColor(c->color);
 	glRectf(c->x, c->y, c->x+c->l, c->y+c->l);
 }
 
 void Rectangulo(RECTANGULO *r)
 {
+	AsignaColor(r->color);
 	glRectf(r->x, r->y, r->x+r->ancho, r->y+r->alto);
 }
 
 void PoligonoI(POLIGONOi *p)
 {
 	unsigned char i;
+	AsignaColor(p->color);
 	glBegin(GL_LINE_LOOP);
 	for(i=0;i<p->numL;i++)
 	{
@@ -418,6 +432,7 @@ void Circulo(CIRCULO *c)
 	glEnd();*/
 
 	float th, x, y;
+	AsignaColor(c->color);
 	glBegin(GL_LINE_LOOP);
 	for(th=0;th<=360; th+=1)
 	{
@@ -431,7 +446,7 @@ void Circulo(CIRCULO *c)
 void Elipse(ELIPSE *e)
 {
 	float x,y,th, xr, yr;
-
+	AsignaColor(e->color);
 	glBegin(GL_LINE_LOOP);
 	for(th=0; th<360; th+=1)
 	{
