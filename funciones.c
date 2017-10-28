@@ -37,7 +37,7 @@ void AsignaColor(COLOR color)
 	glColor3f(PaletaColor[color][0],PaletaColor[color][1],PaletaColor[color][2]);
 }
 
-void TopBar()
+void TopBar(BOTON* topBar)
 {
 	int i;
 	//__________________________ Fondo
@@ -47,17 +47,28 @@ void TopBar()
 	//_________________________Paleta colores
 	for(i = 0; i < 14; i++)
 	{
+		//_______________________ llenar caracteriasticas del boton
+		topBar[i].xl = SIDE_BAR+15*i;
+		topBar[i].yl = 0;
+		topBar[i].xr = SIDE_BAR+15*(i+1);
+		topBar[i].yr = 15;
+		topBar[i].id = i;
+
+		topBar[i+14].xl = SIDE_BAR+15*i;
+		topBar[i+14].yl = 15;
+		topBar[i+14].xr = SIDE_BAR+15*(i+1);
+		topBar[i+14].yr = 30;
+		topBar[i+14].id = i+14;
+
+		//_______________________ dibujar cuadro
 		AsignaColor(i);
-		glRectf(SIDE_BAR+15*i, 0, SIDE_BAR+15*(i+1), 15);
-	}
-	for(i = 0; i < 14; i++)
-	{
+		glRectf(topBar[i].xl, topBar[i].yl, topBar[i].xr, topBar[i].yr);
 		AsignaColor(i+14);
-		glRectf(SIDE_BAR+15*i, 15, SIDE_BAR+15*(i+1), 30);
+		glRectf(topBar[i+14].xl, topBar[i+14].yl, topBar[i+14].xr, topBar[i+14].yr);
 	}
 }
 
-void SideBar()
+void SideBar(BOTON* sideBar)
 {
 	int i;
 	float th, x, y;
@@ -66,46 +77,47 @@ void SideBar()
 	glRectf(0,0,SIDE_BAR,ALTO);
 
 	//___________________________ Figuras
-	for(i = 0; i < 7; i++)
+	for(i = 0; i < 8; i++)
 	{
 		glColor3f(0.90, 0.90, 0.90);
 		glRectf(5, TOP_BAR+20*i+(i*10), 25, TOP_BAR+20*(i+1)+(i*10));
-glPointSize(5);
-				glBegin(GL_POINTS);
-				glVertex2f(15, TOP_BAR+20*i+(i*10)+10);
-				glEnd();
-				glPointSize(1);
+
 		AsignaColor(NEGRO);
 		glPolygonMode(GL_BACK, GL_LINE);
-		glBegin(GL_POLYGON);
 		switch(i)
 		{
 			case 0: //punto
-				glPointSize(5);
+				glPointSize(3);
 				glBegin(GL_POINTS);
 				glVertex2f(15, TOP_BAR+20*i+(i*10)+10);
 				glEnd();
 				glPointSize(1);
-				printf("%d\n", TOP_BAR+20*i+(i*10)+10);
+				glEnd();
 				break;
 			case 1://Cuadrado
+				glBegin(GL_POLYGON);
 				glVertex2f(8, TOP_BAR+20*i+(i*10)+3);
 				glVertex2f(23, TOP_BAR+20*i+(i*10)+3);
 				glVertex2f(23, TOP_BAR+20*(i+1)+(i*10)-3);
 				glVertex2f(8, TOP_BAR+20*(i+1)+(i*10)-3);
+				glEnd();
 				break;
 
 			case 2://Rectangulo
+				glBegin(GL_POLYGON);
 				glVertex2f(8, TOP_BAR+20*i+(i*10)+6);
 				glVertex2f(23, TOP_BAR+20*i+(i*10)+6);
 				glVertex2f(23, TOP_BAR+20*(i+1)+(i*10)-6);
 				glVertex2f(8, TOP_BAR+20*(i+1)+(i*10)-6);
+				glEnd();
 				break;
 
 			case 3:	//Triangulo
+				glBegin(GL_POLYGON);
 				glVertex2f(8, TOP_BAR+20*(i+1)+(i*10)-3);
 				glVertex2f(15, TOP_BAR+20*i+(i*10)+3);
 				glVertex2f(23, TOP_BAR+20*(i+1)+(i*10)-3);
+				glEnd();
 				break;
 
 			case 4:	//Circulo
@@ -131,10 +143,11 @@ glPointSize(5);
 				break;
 
 			case 6:
+				glBegin(GL_POLYGON);
 
+				glEnd();
 				break;
 		}
-		glEnd();
 		glPolygonMode(GL_BACK, GL_FILL);
 	}
 }

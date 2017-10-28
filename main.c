@@ -3,7 +3,8 @@
 //_________________________________________________ Variables globales
 LISTA *cabeza, *actual;
 OPCIONES op;
-char tipo='s';
+BOTON topBar[28];
+BOTON sideBar[8];
 
 int main(int argc, char** argv)
 {
@@ -27,7 +28,7 @@ int main(int argc, char** argv)
 	cabeza = NULL;
 	op.color = BLANCO;
 	op.tipo_linea = 0xFFFF;
-	op.tipo = 'f';
+	op.tipo = 's';
 	op.ancho = 1;
 
 	//ESTADO DE ESPERA DE EVENTOS
@@ -43,8 +44,8 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//__________________________________ Barras de herramientas
-	TopBar();
-	SideBar();
+	TopBar(topBar);
+	SideBar(sideBar);
 
 	//________________________________ Dibujar figuras del usuario
 	AsignaColor(ROJO);
@@ -53,12 +54,6 @@ void display()
 		Dibujar(aux);
 		aux = aux->s;
 	}
-
-	/*glPointSize(5);
-	glBegin(GL_POINTS);
-	glVertex2f(ANCHO/2, ALTO/2);
-	glEnd();
-	glPointSize(1);*/
 
 	glFlush();
 }
@@ -69,10 +64,10 @@ void Mouse(int button, int state, int x, int y)
 	{
 		LISTA* aux;
 		aux = (LISTA*)malloc(sizeof(LISTA));
-		aux->tipo = tipo;
+		aux->tipo = op.tipo;
 		aux->s = NULL;
 
-		switch(tipo){
+		switch(op.tipo){
 			case 's':
 				aux->figura = (void*)CrearCuadrado(x, y, op);
 				break;
@@ -115,11 +110,12 @@ void Mouse(int button, int state, int x, int y)
 		{
 			aux = cabeza;
 			cabeza = cabeza->s;
+			if(aux->tipo == 'p')
+				free(((POLIGONOi*)(aux->figura))->v);
 			free(aux->figura);
 			free(aux);
 		}
 		glutPostRedisplay();
-		tipo = 'r';
 	}
 }
 

@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 #define PI 3.14159265
-#define ANCHO 1200
+#define ANCHO 800
 #define ALTO 600
 #define TOP_BAR 30
 #define SIDE_BAR 30
@@ -131,6 +131,15 @@ typedef struct OPCIONES	//Opciones con las que se puede dibujar cada figura
 	int ancho;
 }OPCIONES;
 
+typedef struct BOTON
+{
+	float xl;
+	float yl;
+	float xr;
+	float yr;
+	char id;
+}BOTON;
+
 //________________________________________________ Prototipos
 //Callbacks
 void display(void);
@@ -149,8 +158,8 @@ void Punto(PUNTO *p);
 void DibujarTexto(char *text, float x, float y);
 //Extras
 void AsignaColor(COLOR color);
-void TopBar();
-void SideBar();
+void TopBar(BOTON* topBar);
+void SideBar(BOTON* sideBar);
 void Push(LISTA** lista, LISTA** elemento);
 //Creacion de figuras
 CUADRADO* CrearCuadrado(int x, int y, OPCIONES op);
