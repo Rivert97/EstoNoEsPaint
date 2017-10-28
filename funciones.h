@@ -119,7 +119,7 @@ typedef struct				//Estructura elipse
 typedef struct LISTA 
 {
 	void* figura;
-	char tipo;			//s->cuadrado, e->elipse, c->circulo, p->poligono, r->rectangulo, l->linea, d->punto
+	char tipo;			//s->cuadrado, e->elipse, c->circulo, p->pentagono, h->hexagono, r->rectangulo, l->linea, d->punto
 	struct LISTA* s;
 }LISTA;
 

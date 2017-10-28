@@ -96,6 +96,7 @@ void SideBar(BOTON* sideBarB)
 		switch(i)
 		{
 			case 0: //punto
+				sideBarB[i].id = 'd';
 				glPointSize(3);
 				glBegin(GL_POINTS);
 				glVertex2f(sideBarB[i].xl + (sideBarB[i].xr - sideBarB[i].xl)/2, sideBarB[i].yl + (sideBarB[i].yr - sideBarB[i].yl)/2);
@@ -104,6 +105,7 @@ void SideBar(BOTON* sideBarB)
 				glEnd();
 				break;
 			case 1://Cuadrado
+				sideBarB[i].id = 's';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 3);
 				glVertex2f(sideBarB[i].xr - 3, sideBarB[i].yl + 3);
@@ -113,6 +115,7 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 2://Rectangulo
+				sideBarB[i].id = 'r';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 6);
 				glVertex2f(sideBarB[i].xr - 3, sideBarB[i].yl + 6);
@@ -122,6 +125,7 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 3:	//Triangulo
+				sideBarB[i].id = 't';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 3, TOP_BAR+20*(i+1)+(i*10)-3);
 				glVertex2f(sideBarB[i].xl + (sideBarB[i].xr - sideBarB[i].xl)/2, sideBarB[i].yl + 3);
@@ -130,6 +134,7 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 4:	//Circulo
+				sideBarB[i].id = 'c';
 				glBegin(GL_LINE_LOOP);
 				for(th=0;th<=360; th+=1)
 				{
@@ -141,6 +146,7 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 5:	//Elipse
+				sideBarB[i].id = 'e';
 				glBegin(GL_LINE_LOOP);
 				for(th=0; th<360; th+=1)
 				{
@@ -152,6 +158,7 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 6:	//Pentagono
+				sideBarB[i].id = 'p';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + (sideBarB[i].xr - sideBarB[i].xl)/2, sideBarB[i].yl + 2);
 				glVertex2f(sideBarB[i].xr - 2, sideBarB[i].yl + 8);
@@ -162,6 +169,7 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 7:	//Hexágono
+				sideBarB[i].id = 'h';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 6, sideBarB[i].yl + 3);
 				glVertex2f(sideBarB[i].xr - 6, sideBarB[i].yl + 3);
