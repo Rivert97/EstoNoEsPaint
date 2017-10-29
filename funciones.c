@@ -583,7 +583,7 @@ void Circulo(CIRCULO *c)
 
 void Elipse(ELIPSE *e)
 {
-	float x,y,th, xr, yr;
+	float x,y,th, xr, yr, th2,a,b;
 	AsignaColor(e->color);
 	glBegin(GL_LINE_LOOP);
 
@@ -600,18 +600,35 @@ void Elipse(ELIPSE *e)
 	}
 	else 	//Relleno
  	{
-		for(th=0; th<180; th+=(180.0/Min(abs(e->a), abs(e->b))) < 1? 180.0/Min(abs(e->a), abs(e->b)): 1)
+ 		a = e->a;
+ 		b = e->b;
+ 		if(abs(a) < abs(b))
+ 		{
+	 		for(a = e->a; a >=0; a--)
+	 		{
+				for(th=0; th<360; th++)
+				{
+					x = a*cos(th/180.0*PI);
+					y = b*sin(th/180.0*PI);
+					xr = x*cos(e->th/180.0*PI)-y*sin(e->th/180.0*PI) + e->x0;
+					yr = x*sin(e->th/180.0*PI)+y*cos(e->th/180.0*PI) + e->y0;
+					glVertex2f(xr,yr);
+				}
+			}
+		}
+		else
 		{
-			x = e->a*cos(th/180.0*PI);
-			y = e->b*sin(th/180.0*PI);
-			xr = x*cos(e->th/180.0*PI)-y*sin(e->th/180.0*PI) + e->x0;
-			yr = x*sin(e->th/180.0*PI)+y*cos(e->th/180.0*PI) + e->y0;
-			glVertex2f(xr,yr);
-			if(abs(e->a) < abs(e->b))
-				yr = -x*sin(e->th/180.0*PI)-y*cos(e->th/180.0*PI) + e->y0;
-			if(abs(e->a) >= abs(e->b))
-				xr = -x*cos(e->th/180.0*PI)+y*sin(e->th/180.0*PI) + e->x0;
-			glVertex2f(xr,yr);
+			for(b = e->b; b >=0; b--)
+	 		{
+				for(th=0; th<360; th++)
+				{
+					x = a*cos(th/180.0*PI);
+					y = b*sin(th/180.0*PI);
+					xr = x*cos(e->th/180.0*PI)-y*sin(e->th/180.0*PI) + e->x0;
+					yr = x*sin(e->th/180.0*PI)+y*cos(e->th/180.0*PI) + e->y0;
+					glVertex2f(xr,yr);
+				}
+			}
 		}
 	}
 	glEnd();
