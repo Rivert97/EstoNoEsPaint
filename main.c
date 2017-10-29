@@ -186,26 +186,37 @@ void Mouse(int button, int state, int x, int y)
 	{
 		int index;
 		index = ClickBar(sideBarB, NSIDE_BAR_B, x, y);
-		op.tipo = sideBarB[index].id;
+		if(index >= 0)
+			op.tipo = sideBarB[index].id;
 	}
 	else 	//Click en la barra de arriba
 	{
 		int index;
 		index = ClickBar(topBarB, NTOP_BAR_B, x, y);
-		op.color = topBarB[index].id;
+		if(index >= 0)
+			op.color = topBarB[index].id;
 	}
 }
 
 void ActiveMouse(int x, int y)
 {
-	if(x >= SIDE_BAR && y >= TOP_BAR)
-	{
+	//if(x >= SIDE_BAR && y >= TOP_BAR)
+	//{
 		if(actual!=NULL)
 		{
 			FREEFORM* aux;
 			switch(actual->tipo){
 				case 's':
-					((CUADRADO*)(actual->figura))->l =  Min(x - ((CUADRADO*)(actual->figura))->x, y - ((CUADRADO*)(actual->figura))->y);
+					((CUADRADO*)(actual->figura))->l =  Min(abs(x - ((CUADRADO*)(actual->figura))->x), abs(y - ((CUADRADO*)(actual->figura))->y));
+					if(y < ((CUADRADO*)(actual->figura))->y)
+						((CUADRADO*)(actual->figura))->direcciony = -1;
+					else
+						((CUADRADO*)(actual->figura))->direcciony = 1;
+
+					if(x < ((CUADRADO*)(actual->figura))->x)
+						((CUADRADO*)(actual->figura))->direccionx = -1;
+					else
+						((CUADRADO*)(actual->figura))->direccionx = 1;
 					break;
 				case 'r':
 					((RECTANGULO*)(actual->figura))->ancho = x - ((RECTANGULO*)(actual->figura))->x;
@@ -217,11 +228,15 @@ void ActiveMouse(int x, int y)
 					break;
 
 				case 'l':
-
+					((LINEA*)(actual->figura))->xf = x;
+					((LINEA*)(actual->figura))->yf = y;
 					break;
 
 				case 'e':
-
+					((ELIPSE*)(actual->figura))->a = x - ((ELIPSE*)(actual->figura))->x0;
+					((ELIPSE*)(actual->figura))->b = y - ((ELIPSE*)(actual->figura))->y0;
+					break;
+				
 					break;
 
 				case 'p':
@@ -237,6 +252,10 @@ void ActiveMouse(int x, int y)
 
 				case 't':
 					((TRIANGULO*)(actual->figura))->lado = x - ((TRIANGULO*)(actual->figura))->x;
+					if(y > ((TRIANGULO*)(actual->figura))->y)
+						((TRIANGULO*)(actual->figura))->direccion = -1;
+					else
+						((TRIANGULO*)(actual->figura))->direccion = 1;
 					break;
 
 				case 'f':
@@ -256,7 +275,7 @@ void ActiveMouse(int x, int y)
 			}
 			glutPostRedisplay();
 		}
-	}
+	//}
 }
 
 

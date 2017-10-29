@@ -1,7 +1,7 @@
 #include "funciones.h"
 
 //_______________________________________________________________________ Paleta de colores (CORREGIR)
-const float PaletaColor[28][3] = {0,0,0,/**/0,0,0.5,/**/0,0,1,/**/
+const float PaletaColor[NCOLORES][3] = {0,0,0,/**/0,0,0.5,/**/0,0,1,/**/
 								0,1,1,/**/0,0.5,1,/**/0,0.5,0.5,/**/
 								0,1,0.5,/**/0,1,0,/**/0,0.5,0,/**/
 								0.5,0,0,/**/1,0,0,/**/0.5,0,0.5,/**/
@@ -52,7 +52,7 @@ void TopBar(BOTON* topBarB)
 	glRectf(0,0,ANCHO,TOP_BAR);
 
 	//_________________________Paleta colores
-	for(i = 0; i < 14; i++)
+	for(i = 0; i < NCOLORES/2; i++)
 	{
 		//_______________________ llenar caracteriasticas de los botones
 		topBarB[i].xl = SIDE_BAR+15*i;
@@ -84,7 +84,7 @@ void SideBar(BOTON* sideBarB)
 	glRectf(0,0,SIDE_BAR,ALTO);
 
 	//___________________________ Figuras
-	for(i = 0; i < 8; i++)
+	for(i = 0; i < NSIDE_BAR_B; i++)
 	{
 		//______________________________ Llenando caracteriasticas del boton
 		sideBarB[i].xl = 5;
@@ -244,6 +244,8 @@ CUADRADO* CrearCuadrado(int x, int y, OPCIONES op)
 	aux->x = x;
 	aux->y = y;
 	aux->l = 10;
+	aux->direccionx = 1;
+	aux->direcciony = 1;
 	aux->color = op.color;
 
 	return aux;
@@ -361,6 +363,7 @@ TRIANGULO* CrearTriangulo(int x, int y, OPCIONES op)
 	aux->x = x;
 	aux->y = y;
 	aux->lado = 10;
+	aux->direccion = 1;
 	aux->color = op.color;
 }
 
@@ -426,7 +429,7 @@ void Triangulo(TRIANGULO* t)
 	AsignaColor(t->color);
 	glBegin(GL_POLYGON);
 	glVertex2f(t->x, t->y);
-	glVertex2f(t->x + t->lado/2, t->y - sqrt(3*(t->lado*t->lado)/4));
+	glVertex2f(t->x + t->lado/2, t->y - t->direccion*sqrt(3*(t->lado*t->lado)/4));
 	glVertex2f(t->x + t->lado, t->y);
 	glEnd();
 }
@@ -455,7 +458,13 @@ void FreeForm(FREEFORM* f)
 void Cuadrado(CUADRADO *c)
 {
 	AsignaColor(c->color);
-	glRectf(c->x, c->y, c->x+c->l, c->y+c->l);
+	/*glBegin(GL_POLYGON);
+	glVertex2f(c->x, c->y);
+	glVertex2f(c->x + c->l, c->y);
+	glVertex2f(c->x + c->l, c->y + direccion*c->l);
+	glVertex2f(c->x, c->y + direccion*c->l);
+	glEnd();*/
+	glRectf(c->x, c->y, c->x+c->direccionx*c->l, c->y+c->direcciony*c->l);
 }
 
 void Rectangulo(RECTANGULO *r)

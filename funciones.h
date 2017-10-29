@@ -9,6 +9,7 @@
 #define SIDE_BAR 30
 #define NSIDE_BAR_B 10
 #define NTOP_BAR_B 28  
+#define NCOLORES 28
 
 
 typedef enum{			//Enumeración de colores
@@ -74,6 +75,8 @@ typedef struct{
 	float x;
 	float y;
 	float l;
+	float direccionx;
+	float direcciony;
 	COLOR color;
 	char tipo_linea;
 	char tipo;
@@ -131,6 +134,7 @@ typedef struct 				//Estructura triangulo
 	float x;
 	float y;
 	float lado;
+	float direccion;
 	COLOR color;
 	char tipo_linea;
 	char tipo;
