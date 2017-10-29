@@ -62,11 +62,11 @@ void display()
 
 void Mouse(int button, int state, int x, int y)
 {
+	LISTA* aux;
 	if(x >= SIDE_BAR && y >= TOP_BAR)	//Click dentro de pantalla de dibujo
 	{
 		if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 		{
-			LISTA* aux;
 			aux = (LISTA*)malloc(sizeof(LISTA));
 			aux->tipo = op.tipo;
 			aux->s = NULL;
@@ -108,6 +108,10 @@ void Mouse(int button, int state, int x, int y)
 					aux->figura = (void*)CrearTriangulo(x, y, op);
 					break;
 
+				case 'f':
+					aux->figura = (void*)CrearFreeForm(x, y, op);
+					break;
+
 				default:
 					break;
 			}
@@ -118,7 +122,6 @@ void Mouse(int button, int state, int x, int y)
 		}
 		else if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
 		{
-			LISTA* aux;
 			while(cabeza != NULL)
 			{
 				aux = cabeza;
@@ -166,6 +169,11 @@ void Mouse(int button, int state, int x, int y)
 						free((TRIANGULO*)(aux->figura));
 						break;
 
+					case 'f':
+						free(((FREEFORM*)(aux->figura))->p);
+						free((FREEFORM*)(aux->figura));
+						break;
+
 					default:
 						break;
 				}
@@ -194,6 +202,7 @@ void ActiveMouse(int x, int y)
 	{
 		if(actual!=NULL)
 		{
+			FREEFORM* aux;
 			switch(actual->tipo){
 				case 's':
 					((CUADRADO*)(actual->figura))->l =  Min(x - ((CUADRADO*)(actual->figura))->x, y - ((CUADRADO*)(actual->figura))->y);
@@ -224,11 +233,22 @@ void ActiveMouse(int x, int y)
 					break;
 
 				case 'd':
-
 					break;
 
 				case 't':
+					((TRIANGULO*)(actual->figura))->lado = x - ((TRIANGULO*)(actual->figura))->x;
+					break;
 
+				case 'f':
+					aux = (FREEFORM*)(actual->figura);
+					while(aux->s != NULL)
+						aux = aux->s;
+
+					aux->s = (FREEFORM*)malloc(sizeof(FREEFORM));
+					aux->s->p = (PUNTO*)malloc(sizeof(PUNTO));
+					aux->s->p->x = x;
+					aux->s->p->y = y;
+					aux->s->s = NULL;
 					break;
 
 				default:

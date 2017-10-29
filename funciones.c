@@ -111,7 +111,29 @@ void SideBar(BOTON* sideBarB)
 				glPointSize(1);
 				glEnd();
 				break;
-			case 1://Cuadrado
+
+			case 1:	//Linea
+				sideBarB[i].id = 'l';
+				glBegin(GL_LINES);
+				glVertex2f(sideBarB[i].xl + 2, sideBarB[i].yl + 2);
+				glVertex2f(sideBarB[i].xr - 2, sideBarB[i].yr - 2);
+				glEnd();
+				break;
+
+			case 2:	//Linea libre (freeform)
+				sideBarB[i].id = 'f';
+				glBegin(GL_LINE_STRIP);
+				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 3);
+				glVertex2f(sideBarB[i].xl + 2, sideBarB[i].yl + 5);
+				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 10);
+				glVertex2f(sideBarB[i].xl + 10, sideBarB[i].yr - 3);
+				glVertex2f(sideBarB[i].xr - 5, sideBarB[i].yr - 5);
+				glVertex2f(sideBarB[i].xr - 2, sideBarB[i].yr - 10);
+				glVertex2f(sideBarB[i].xr - 7, sideBarB[i].yr -15);
+				glEnd();
+				break;
+
+			case 3://Cuadrado
 				sideBarB[i].id = 's';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 3);
@@ -121,7 +143,7 @@ void SideBar(BOTON* sideBarB)
 				glEnd();
 				break;
 
-			case 2://Rectangulo
+			case 4://Rectangulo
 				sideBarB[i].id = 'r';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 6);
@@ -131,7 +153,7 @@ void SideBar(BOTON* sideBarB)
 				glEnd();
 				break;
 
-			case 3:	//Triangulo
+			case 5:	//Triangulo
 				sideBarB[i].id = 't';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 3, TOP_BAR+20*(i+1)+(i*10)-3);
@@ -140,7 +162,7 @@ void SideBar(BOTON* sideBarB)
 				glEnd();
 				break;
 
-			case 4:	//Circulo
+			case 6:	//Circulo
 				sideBarB[i].id = 'c';
 				glBegin(GL_LINE_LOOP);
 				for(th=0;th<=360; th+=1)
@@ -152,7 +174,7 @@ void SideBar(BOTON* sideBarB)
 				glEnd();
 				break;
 
-			case 5:	//Elipse
+			case 7:	//Elipse
 				sideBarB[i].id = 'e';
 				glBegin(GL_LINE_LOOP);
 				for(th=0; th<360; th+=1)
@@ -164,7 +186,7 @@ void SideBar(BOTON* sideBarB)
 				glEnd();
 				break;
 
-			case 6:	//Pentagono
+			case 8:	//Pentagono
 				sideBarB[i].id = 'p';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + (sideBarB[i].xr - sideBarB[i].xl)/2, sideBarB[i].yl + 2);
@@ -175,7 +197,7 @@ void SideBar(BOTON* sideBarB)
 				glEnd();
 				break;
 
-			case 7:	//Hexágono
+			case 9:	//Hexágono
 				sideBarB[i].id = 'h';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 6, sideBarB[i].yl + 3);
@@ -263,6 +285,20 @@ LINEA* CrearLinea(int x, int y, OPCIONES op)
 	aux->yi = y;
 	aux->xf = x+10;
 	aux->yf = y+10;
+	aux->color = op.color;
+
+	return aux;
+}
+
+FREEFORM* CrearFreeForm(int x, int y, OPCIONES op)
+{
+	FREEFORM* aux;
+
+	aux = (FREEFORM*)malloc(sizeof(FREEFORM));
+	aux->p = (PUNTO*)malloc(sizeof(PUNTO));
+	aux->p->x = x;
+	aux->p->y = y;
+	aux->s = NULL;
 	aux->color = op.color;
 
 	return aux;
@@ -366,6 +402,12 @@ void Dibujar(LISTA* l)
 
 		case 'h':
 			PoligonoI((POLIGONOi*)(l->figura));
+			break;
+
+		case 'f':
+			FreeForm((FREEFORM*)(l->figura));
+			break;
+
 		default:
 			break;
 	}
@@ -384,7 +426,7 @@ void Triangulo(TRIANGULO* t)
 	AsignaColor(t->color);
 	glBegin(GL_POLYGON);
 	glVertex2f(t->x, t->y);
-	glVertex2f(t->x + t->lado/2, t->y + sqrt(3*(t->lado*t->lado)/4));
+	glVertex2f(t->x + t->lado/2, t->y - sqrt(3*(t->lado*t->lado)/4));
 	glVertex2f(t->x + t->lado, t->y);
 	glEnd();
 }
@@ -395,6 +437,18 @@ void Linea(LINEA *l)
 	glBegin(GL_LINES);
 	glVertex2f(l->xi, l->yi);
 	glVertex2f(l->xf, l->yf);
+	glEnd();
+}
+
+void FreeForm(FREEFORM* f)
+{
+	AsignaColor(f->color);
+	glBegin(GL_LINE_STRIP);
+	while(f!=NULL)
+	{
+		glVertex2f(f->p->x, f->p->y);
+		f = f->s;
+	}
 	glEnd();
 }
 

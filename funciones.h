@@ -7,7 +7,7 @@
 #define ALTO 600
 #define TOP_BAR 30
 #define SIDE_BAR 30
-#define NSIDE_BAR_B 8
+#define NSIDE_BAR_B 10
 #define NTOP_BAR_B 28  
 
 
@@ -60,6 +60,15 @@ typedef struct{			//Estructura línea (Pi,Pf)
 	int ancho;
 	char tipo;
 }LINEA;
+
+typedef struct FREEFORM{
+	PUNTO* p;
+	struct FREEFORM* s;
+	COLOR color;
+	char tipo_linea;
+	char tipo;
+	int ancho_linea;
+}FREEFORM;
 
 typedef struct{
 	float x;
@@ -169,6 +178,7 @@ void Circulo(CIRCULO *c);
 void Elipse(ELIPSE *e);
 void Punto(PUNTO *p);
 void Triangulo(TRIANGULO* t);
+void FreeForm(FREEFORM* f);
 void DibujarTexto(char *text, float x, float y);
 //Extras
 void AsignaColor(COLOR color);
@@ -187,4 +197,5 @@ ELIPSE* CrearElipse(int x, int y, OPCIONES op);
 POLIGONOi* CrearPoligonoi(int x, int y, OPCIONES op);
 PUNTO* CrearPunto(int x, int y, OPCIONES op);
 TRIANGULO* CrearTriangulo(int x, int y, OPCIONES op);
+FREEFORM* CrearFreeForm(int x, int y, OPCIONES op);
 
