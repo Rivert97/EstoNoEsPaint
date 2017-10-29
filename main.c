@@ -236,18 +236,13 @@ void ActiveMouse(int x, int y)
 					((ELIPSE*)(actual->figura))->a = x - ((ELIPSE*)(actual->figura))->x0;
 					((ELIPSE*)(actual->figura))->b = y - ((ELIPSE*)(actual->figura))->y0;
 					break;
-				
-					break;
-
+					
 				case 'p':
 
 					break;
 
 				case 'h':
 
-					break;
-
-				case 'd':
 					break;
 
 				case 't':
