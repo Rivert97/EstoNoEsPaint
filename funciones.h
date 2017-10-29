@@ -8,7 +8,7 @@
 #define TOP_BAR 30
 #define SIDE_BAR 30
 #define NSIDE_BAR_B 8
-#define NTOP_BAR_B 28
+#define NTOP_BAR_B 28  
 
 
 typedef enum{			//Enumeración de colores
@@ -177,6 +177,7 @@ void SideBar(BOTON* sideBarB);
 void Push(LISTA** lista, LISTA** elemento);
 int ClickBar(BOTON* botones, int size, int x, int y);
 int ClickBoton(BOTON boton, int x, int y);
+float Min(int a, int b);
 //Creacion de figuras
 CUADRADO* CrearCuadrado(int x, int y, OPCIONES op);
 RECTANGULO* CrearRectangulo(int x, int y, OPCIONES op);

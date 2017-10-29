@@ -11,6 +11,13 @@ const float PaletaColor[28][3] = {0,0,0,/**/0,0,0.5,/**/0,0,1,/**/
 								0.5,1,0.5,/**/0.5,0.5,1,/**/0.5,1,1,/**/
 								1,0.5,1,/**/1,1,0.5,/**/1,1,1};					//27 combinaciones
 
+float Min(int a, int b)
+{
+	if(a <= b)
+		return a;
+	else
+		return b;
+}
 
 void Push(LISTA** lista, LISTA** elemento)
 {

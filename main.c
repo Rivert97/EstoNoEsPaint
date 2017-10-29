@@ -43,10 +43,6 @@ void display()
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//__________________________________ Barras de herramientas
-	TopBar(topBarB);
-	SideBar(sideBarB);
-
 	//________________________________ Dibujar figuras del usuario
 	AsignaColor(ROJO);
 	while(aux != NULL)
@@ -55,12 +51,18 @@ void display()
 		aux = aux->s;
 	}
 
+	//__________________________________ Barras de herramientas
+	TopBar(topBarB);
+	SideBar(sideBarB);
+
+	
+
 	glFlush();
 }
 
 void Mouse(int button, int state, int x, int y)
 {
-	if(x > SIDE_BAR && y > TOP_BAR)	//Click dentro de pantalla de dibujo
+	if(x >= SIDE_BAR && y >= TOP_BAR)	//Click dentro de pantalla de dibujo
 	{
 		if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 		{
@@ -111,6 +113,7 @@ void Mouse(int button, int state, int x, int y)
 			}
 
 			Push(&cabeza, &aux);
+			actual = aux;
 			glutPostRedisplay();
 		}
 		else if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
@@ -187,7 +190,53 @@ void Mouse(int button, int state, int x, int y)
 
 void ActiveMouse(int x, int y)
 {
-	
+	if(x >= SIDE_BAR && y >= TOP_BAR)
+	{
+		if(actual!=NULL)
+		{
+			switch(actual->tipo){
+				case 's':
+					((CUADRADO*)(actual->figura))->l =  Min(x - ((CUADRADO*)(actual->figura))->x, y - ((CUADRADO*)(actual->figura))->y);
+					break;
+				case 'r':
+					((RECTANGULO*)(actual->figura))->ancho = x - ((RECTANGULO*)(actual->figura))->x;
+					((RECTANGULO*)(actual->figura))->alto = y - ((RECTANGULO*)(actual->figura))->y;
+					break;
+				
+				case 'c':
+					((CIRCULO*)(actual->figura))->r =  Min(x - ((CIRCULO*)(actual->figura))->x0, y - ((CIRCULO*)(actual->figura))->y0);
+					break;
+
+				case 'l':
+
+					break;
+
+				case 'e':
+
+					break;
+
+				case 'p':
+
+					break;
+
+				case 'h':
+
+					break;
+
+				case 'd':
+
+					break;
+
+				case 't':
+
+					break;
+
+				default:
+					break;
+			}
+			glutPostRedisplay();
+		}
+	}
 }
 
 
