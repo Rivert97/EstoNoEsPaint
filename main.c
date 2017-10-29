@@ -63,138 +63,145 @@ void display()
 void Mouse(int button, int state, int x, int y)
 {
 	LISTA* aux;
-	if(x >= SIDE_BAR && y >= TOP_BAR)	//Click dentro de pantalla de dibujo
+	if(state == GLUT_DOWN)
 	{
-		if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+		if(x >= SIDE_BAR && y >= TOP_BAR)	//Click dentro de pantalla de dibujo
 		{
-			aux = (LISTA*)malloc(sizeof(LISTA));
-			aux->tipo = op.tipo;
-			aux->s = NULL;
-
-			switch(op.tipo){
-				case 's':
-					aux->figura = (void*)CrearCuadrado(x, y, op);
-					break;
-				
-				case 'r':
-					aux->figura = (void*)CrearRectangulo(x, y, op);
-					break;
-				
-				case 'c':
-					aux->figura = (void*)CrearCirculo(x, y, op);
-					break;
-
-				case 'l':
-					aux->figura = (void*)CrearLinea(x, y, op);
-					break;
-
-				case 'e':
-					aux->figura = (void*)CrearElipse(x, y, op);
-					break;
-
-				case 'p':
-					aux->figura = (void*)CrearPoligonoi(x, y, op);
-					break;
-
-				case 'h':
-					aux->figura = (void*)CrearPoligonoi(x, y, op);
-					break;
-
-				case 'd':
-					aux->figura = (void*)CrearPunto(x, y, op);
-					break;
-
-				case 't':
-					aux->figura = (void*)CrearTriangulo(x, y, op);
-					break;
-
-				case 'f':
-					aux->figura = (void*)CrearFreeForm(x, y, op);
-					break;
-
-				default:
-					break;
-			}
-
-			Push(&cabeza, &aux);
-			actual = aux;
-			glutPostRedisplay();
-		}
-		else if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-		{
-			while(cabeza != NULL)
+			if(button == GLUT_LEFT_BUTTON)
 			{
-				aux = cabeza;
-				cabeza = cabeza->s;
-				/*if(aux->tipo == 'p' || aux->tipo == 'h')	//Si es poligono eliminar v
-					free(((POLIGONOi*)(aux->figura))->v);
-				free(aux->figura);*/
+				aux = (LISTA*)malloc(sizeof(LISTA));
+				aux->tipo = op.tipo;
+				aux->s = NULL;
 
-				switch(aux->tipo){
+				switch(op.tipo){
 					case 's':
-						free((CUADRADO*)(aux->figura));
+						aux->figura = (void*)CrearCuadrado(x, y, op);
 						break;
 					
 					case 'r':
-						free((RECTANGULO*)(aux->figura));
+						aux->figura = (void*)CrearRectangulo(x, y, op);
 						break;
 					
 					case 'c':
-						free((CIRCULO*)(aux->figura));
+						aux->figura = (void*)CrearCirculo(x, y, op);
 						break;
 
 					case 'l':
-						free((LINEA*)(aux->figura));
+						aux->figura = (void*)CrearLinea(x, y, op);
 						break;
 
 					case 'e':
-						free((ELIPSE*)(aux->figura));
+						aux->figura = (void*)CrearElipse(x, y, op);
 						break;
 
 					case 'p':
-						free(((POLIGONOi*)(aux->figura))->v);
-						free((POLIGONOi*)(aux->figura));
+						aux->figura = (void*)CrearPentagono(x, y, op);
 						break;
 
 					case 'h':
-						free(((POLIGONOi*)(aux->figura))->v);
-						free((POLIGONOi*)(aux->figura));
+						aux->figura = (void*)CrearHexagono(x, y, op);
 						break;
 
 					case 'd':
-						free((PUNTO*)(aux->figura));
+						aux->figura = (void*)CrearPunto(x, y, op);
 						break;
 
 					case 't':
-						free((TRIANGULO*)(aux->figura));
+						aux->figura = (void*)CrearTriangulo(x, y, op);
 						break;
 
 					case 'f':
-						free(((FREEFORM*)(aux->figura))->p);
-						free((FREEFORM*)(aux->figura));
+						aux->figura = (void*)CrearFreeForm(x, y, op);
 						break;
 
 					default:
 						break;
 				}
-				free(aux);
+
+				Push(&cabeza, &aux);
+				actual = aux;
+				glutPostRedisplay();
 			}
-			glutPostRedisplay();
+			else if(button == GLUT_RIGHT_BUTTON)
+			{
+				while(cabeza != NULL)
+				{
+					aux = cabeza;
+					cabeza = cabeza->s;
+					/*if(aux->tipo == 'p' || aux->tipo == 'h')	//Si es poligono eliminar v
+						free(((POLIGONOi*)(aux->figura))->v);
+					free(aux->figura);*/
+
+					switch(aux->tipo){
+						case 's':
+							free((CUADRADO*)(aux->figura));
+							break;
+						
+						case 'r':
+							free((RECTANGULO*)(aux->figura));
+							break;
+						
+						case 'c':
+							free((CIRCULO*)(aux->figura));
+							break;
+
+						case 'l':
+							free((LINEA*)(aux->figura));
+							break;
+
+						case 'e':
+							free((ELIPSE*)(aux->figura));
+							break;
+
+						case 'p':
+							free(((POLIGONOi*)(aux->figura))->v);
+							free((POLIGONOi*)(aux->figura));
+							break;
+
+						case 'h':
+							free(((POLIGONOi*)(aux->figura))->v);
+							free((POLIGONOi*)(aux->figura));
+							break;
+
+						case 'd':
+							free((PUNTO*)(aux->figura));
+							break;
+
+						case 't':
+							free((TRIANGULO*)(aux->figura));
+							break;
+
+						case 'f':
+							free(((FREEFORM*)(aux->figura))->p);
+							free((FREEFORM*)(aux->figura));
+							break;
+
+						default:
+							break;
+					}
+					free(aux);
+				}
+				glutPostRedisplay();
+			}
+		}
+		else if(x < SIDE_BAR && y > TOP_BAR)	//Click en barra de la izquierda
+		{
+			int index;
+			index = ClickBar(sideBarB, NSIDE_BAR_B, x, y);
+			if(index >= 0)
+				op.tipo = sideBarB[index].id;
+		}
+		else 	//Click en la barra de arriba
+		{
+			int index;
+			index = ClickBar(topBarB, NTOP_BAR_B, x, y);
+			if(index >= 0)
+				op.color = topBarB[index].id;
 		}
 	}
-	else if(x < SIDE_BAR && y > TOP_BAR)	//Click en barra de la izquierda
+	else if(state == GLUT_UP)
 	{
-		int index;
-		index = ClickBar(sideBarB, NSIDE_BAR_B, x, y);
-		if(index >= 0)
-			op.tipo = sideBarB[index].id;
-	}
-	else 	//Click en la barra de arriba
-	{
-		int index;
-		index = ClickBar(topBarB, NTOP_BAR_B, x, y);
-		if(index >= 0)
-			op.color = topBarB[index].id;
+		actual = NULL;
 	}
 }
 
@@ -224,7 +231,7 @@ void ActiveMouse(int x, int y)
 					break;
 				
 				case 'c':
-					((CIRCULO*)(actual->figura))->r =  Min(x - ((CIRCULO*)(actual->figura))->x0, y - ((CIRCULO*)(actual->figura))->y0);
+					((CIRCULO*)(actual->figura))->r =  Min(abs(x - ((CIRCULO*)(actual->figura))->x0), abs(y - ((CIRCULO*)(actual->figura))->y0));
 					break;
 
 				case 'l':
@@ -238,11 +245,11 @@ void ActiveMouse(int x, int y)
 					break;
 					
 				case 'p':
-
+					CalcularPentagono(((POLIGONOi*)(actual->figura))->v, Min(x - ((POLIGONOi*)(actual->figura))->v[0].x, y - ((POLIGONOi*)(actual->figura))->v[0].y));
 					break;
 
 				case 'h':
-
+					CalcularHexagono(((POLIGONOi*)(actual->figura))->v, Min(x - ((POLIGONOi*)(actual->figura))->v[0].x, y - ((POLIGONOi*)(actual->figura))->v[0].y));
 					break;
 
 				case 't':

@@ -97,7 +97,8 @@ typedef struct
 
 typedef struct 
 {
-	unsigned char numL;
+	unsigned char numL;	//+1, el primero es el centro
+	float radio;
 	PUNTO *v;
 	COLOR color;
 	char tipo_linea;
@@ -198,7 +199,11 @@ RECTANGULO* CrearRectangulo(int x, int y, OPCIONES op);
 CIRCULO* CrearCirculo(int x, int y, OPCIONES op);
 LINEA* CrearLinea(int x, int y, OPCIONES op);
 ELIPSE* CrearElipse(int x, int y, OPCIONES op);
-POLIGONOi* CrearPoligonoi(int x, int y, OPCIONES op);
+//PUNTO* CrearPoligonoi(int x, int y, int numL, OPCIONES op);
+POLIGONOi* CrearPentagono(int x, int y, OPCIONES op);
+void CalcularPentagono(PUNTO* v, float radio);
+POLIGONOi* CrearHexagono(int x, int y, OPCIONES op);
+void CalcularHexagono(PUNTO* v, float radio);
 PUNTO* CrearPunto(int x, int y, OPCIONES op);
 TRIANGULO* CrearTriangulo(int x, int y, OPCIONES op);
 FREEFORM* CrearFreeForm(int x, int y, OPCIONES op);

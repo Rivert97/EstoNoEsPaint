@@ -321,13 +321,11 @@ ELIPSE* CrearElipse(int x, int y, OPCIONES op)
 	return aux;
 }
 
-POLIGONOi* CrearPoligonoi(int x, int y, OPCIONES op)
+/*POLIGONOi* CrearPoligonoi(int x, int y, int numL, OPCIONES op)
 {
-	POLIGONOi *aux;
+	PUNTO* aux;
 
-	aux = (POLIGONOi*)malloc(sizeof(POLIGONOi));
-	aux->numL = 5;
-	aux->v = (PUNTO*)malloc(sizeof(PUNTO)*aux->numL);
+	aux->v = (PUNTO*)malloc(sizeof(PUNTO)*numL);
 	aux->v[0].x = x;
 	aux->v[0].y = y;
 	aux->v[1].x = x+10;
@@ -341,6 +339,62 @@ POLIGONOi* CrearPoligonoi(int x, int y, OPCIONES op)
 	aux->color = op.color;
 
 	return aux;
+}*/
+
+POLIGONOi* CrearPentagono(int x, int y, OPCIONES op)
+{
+	POLIGONOi *aux;
+	int i;
+
+	aux = (POLIGONOi*)malloc(sizeof(POLIGONOi));
+	aux->numL = 6;	//+1 para el centro
+	aux->radio = 10.0;
+	aux->v = (PUNTO*)malloc(sizeof(PUNTO)*aux->numL);
+	aux->v[0].x = x;	//El primero es el centro
+	aux->v[0].y = y;
+
+	CalcularPentagono(aux->v, aux->radio);
+	aux->color = op.color;
+
+	return aux;
+}
+
+void CalcularPentagono(PUNTO* v, float radio)
+{
+	int i;
+	for(i = 1; i < 6; i++)	//El primero es el centro
+	{
+		v[i].x = v[0].x + radio*cos(((18.0+i*72.0)*PI)/180.0);
+		v[i].y = v[0].y - radio*sin(((18.0+i*72.0)*PI)/180.0);
+	}
+}
+
+POLIGONOi* CrearHexagono(int x, int y, OPCIONES op)
+{
+	POLIGONOi *aux;
+	int i;
+
+	aux = (POLIGONOi*)malloc(sizeof(POLIGONOi));
+	aux->numL = 7;	//+1 para el centro
+	aux->radio = 10.0;
+	aux->v = (PUNTO*)malloc(sizeof(PUNTO)*aux->numL);
+	aux->v[0].x = x;	//El primero es el centro
+	aux->v[0].y = y;
+
+	CalcularHexagono(aux->v, aux->radio);
+	aux->color = op.color;
+
+	return aux;
+}
+
+void CalcularHexagono(PUNTO* v, float radio)
+{
+	int i;
+	for(i = 1; i < 7; i++)	//El primero es el centro
+	{
+		v[i].x = v[0].x + radio*cos((i*60.0*PI)/180.0);
+		v[i].y = v[0].y - radio*sin((i*60.0*PI)/180.0);
+	}
 }
 
 PUNTO* CrearPunto(int x, int y, OPCIONES op)
@@ -477,8 +531,8 @@ void PoligonoI(POLIGONOi *p)
 {
 	unsigned char i;
 	AsignaColor(p->color);
-	glBegin(GL_LINE_LOOP);
-	for(i=0;i<p->numL;i++)
+	glBegin(GL_POLYGON);
+	for(i=1;i<p->numL;i++)
 	{
 		glVertex2f(p->v[i].x, p->v[i].y);
 	}
@@ -504,12 +558,26 @@ void Circulo(CIRCULO *c)
 	float th, x, y;
 	AsignaColor(c->color);
 	glBegin(GL_LINE_LOOP);
-	for(th=0;th<=360; th+=1)
+
+	if(0)	//Circunferencia
 	{
-		x = c->r * cos(th/180.0 * PI) + c->x0;
-		y = c->r * sin(th/180.0 * PI) + c->y0;
-		glVertex2f(x,y);
+		for(th=0;th<=360; th+=1)
+		{
+			x = c->r * cos(th/180.0 * PI) + c->x0;
+			y = c->r * sin(th/180.0 * PI) + c->y0;
+			glVertex2f(x,y);
+		}
 	}
+	else 	//Circulo
+	{
+		for(x=-1*(c->r+c->x0); x <= c->r+c->x0; x+=0.1)
+		{
+			y = sqrt(c->r*c->r - (x-c->x0)*(x-c->x0))+c->y0;
+			glVertex2f(x,y);
+			y = -sqrt(c->r*c->r - (x-c->x0)*(x-c->x0))+c->y0;
+			glVertex2f(x,y);
+		}
+	}	
 	glEnd();
 }
 
@@ -518,13 +586,33 @@ void Elipse(ELIPSE *e)
 	float x,y,th, xr, yr;
 	AsignaColor(e->color);
 	glBegin(GL_LINE_LOOP);
-	for(th=0; th<360; th+=1)
+
+	if(0)	//Contorno
 	{
-		x = e->a*cos(th/180.0*PI);
-		y = e->b*sin(th/180.0*PI);
-		xr = x*cos(e->th/180.0*PI)-y*sin(e->th/180.0*PI) + e->x0;
-		yr = x*sin(e->th/180.0*PI)+y*cos(e->th/180.0*PI) + e->y0;
-		glVertex2f(xr,yr);
+		for(th=0; th<360; th+=1)
+		{
+			x = e->a*cos(th/180.0*PI);
+			y = e->b*sin(th/180.0*PI);
+			xr = x*cos(e->th/180.0*PI)-y*sin(e->th/180.0*PI) + e->x0;
+			yr = x*sin(e->th/180.0*PI)+y*cos(e->th/180.0*PI) + e->y0;
+			glVertex2f(xr,yr);
+		}
+	}
+	else 	//Relleno
+ 	{
+		for(th=0; th<180; th+=(180.0/Min(abs(e->a), abs(e->b))) < 1? 180.0/Min(abs(e->a), abs(e->b)): 1)
+		{
+			x = e->a*cos(th/180.0*PI);
+			y = e->b*sin(th/180.0*PI);
+			xr = x*cos(e->th/180.0*PI)-y*sin(e->th/180.0*PI) + e->x0;
+			yr = x*sin(e->th/180.0*PI)+y*cos(e->th/180.0*PI) + e->y0;
+			glVertex2f(xr,yr);
+			if(abs(e->a) < abs(e->b))
+				yr = -x*sin(e->th/180.0*PI)-y*cos(e->th/180.0*PI) + e->y0;
+			if(abs(e->a) >= abs(e->b))
+				xr = -x*cos(e->th/180.0*PI)+y*sin(e->th/180.0*PI) + e->x0;
+			glVertex2f(xr,yr);
+		}
 	}
 	glEnd();
 }
