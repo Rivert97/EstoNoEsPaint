@@ -206,8 +206,9 @@ void TopBar(BOTON* topBarB, OPCIONES* op)
 	//__________________________ Resaltar color actual
 	glPolygonMode(GL_BACK, GL_LINE);
 	AsignaColor(NEGRO);
-	glRectf(topBarB[op.color].xl, topBarB[op.color].yl, topBarB[i].xr, topBarB.yr);
-
+	glRectf(topBarB[op->color].xl, topBarB[op->color].yl, topBarB[op->color].xr, topBarB[op->color].yr);
+	glPolygonMode(GL_BACK, GL_FILL);
+	
 	//____________________________________ tipos de llenado
 	for(i = 28; i < NCOLORES + 3; i++)
 	{
