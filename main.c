@@ -57,8 +57,8 @@ void display()
 	}
 
 	//__________________________________ Barras de herramientas
-	TopBar(topBarB, &op);
 	SideBar(sideBarB, tipo);
+	TopBar(topBarB, &op);
 
 	
 

@@ -203,6 +203,11 @@ void TopBar(BOTON* topBarB, OPCIONES* op)
 		glRectf(topBarB[i+14].xl, topBarB[i+14].yl, topBarB[i+14].xr, topBarB[i+14].yr);
 	}
 
+	//__________________________ Resaltar color actual
+	glPolygonMode(GL_BACK, GL_LINE);
+	AsignaColor(NEGRO);
+	glRectf(topBarB[op.color].xl, topBarB[op.color].yl, topBarB[i].xr, topBarB.yr);
+
 	//____________________________________ tipos de llenado
 	for(i = 28; i < NCOLORES + 3; i++)
 	{
@@ -211,18 +216,6 @@ void TopBar(BOTON* topBarB, OPCIONES* op)
 		topBarB[i].yl = 5;
 		topBarB[i].xr = SIDE_BAR+20*(i-27) + 250 + (i-28)*10;
 		topBarB[i].yr = 25;
-		/*if(op->llenado == topBarB[i].id)
-			topBarB[i].checked = 1;
-		else
-			topBarB[i].checked = 0;
-
-		//_________________________________ Dibujar fondo
-		if(topBarB[i].checked == 1)
-			glColor3f(0.75, 0.75, 0.75);
-		else
-			glColor3f(0.90, 0.90, 0.90);
-		glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);*/
-		
 		
 		switch(i)
 		{
