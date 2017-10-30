@@ -73,6 +73,100 @@ void TopBar(BOTON* topBarB)
 		AsignaColor(i+14);
 		glRectf(topBarB[i+14].xl, topBarB[i+14].yl, topBarB[i+14].xr, topBarB[i+14].yr);
 	}
+
+	//____________________________________ tipos de llenado
+	for(i = 28; i < NCOLORES + 3; i++)
+	{
+		//______________________________ Llenando caracteriasticas del boton
+		topBarB[i].xl = SIDE_BAR+20*(i-28) + 250 + (i-28)*10;
+		topBarB[i].yl = 5;
+		topBarB[i].xr = SIDE_BAR+20*(i-27) + 250 + (i-28)*10;
+		topBarB[i].yr = 25;
+
+		//_________________________________ Dibujar fondo
+		glColor3f(0.90, 0.90, 0.90);
+		glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);
+		
+		AsignaColor(AZUL_FUERTE);
+		switch(i)
+		{
+			case 28: //GL_FILL
+				glPolygonMode(GL_BACK, GL_FILL);
+				topBarB[i].id = GL_FILL;
+				break;
+
+			case 29:	//GL_LINE
+				glPolygonMode(GL_BACK, GL_LINE);
+				topBarB[i].id = GL_LINE;
+				break;
+
+			case 30:	//GL_POINTS
+				glPolygonMode(GL_BACK, GL_POINT);
+				topBarB[i].id = GL_POINT;
+				break;
+
+			default:
+				break;
+		}
+
+		glRectf(topBarB[i].xl + 3, topBarB[i].yl + 3, topBarB[i].xr - 3, topBarB[i].yr - 3);
+		glPolygonMode(GL_BACK, GL_FILL);
+	}
+
+	//______________________________________ tipos de linea
+	for(i = NCOLORES + 3; i < NTOP_BAR_B; i++)
+	{
+		//______________________________ Llenando caracteriasticas del boton
+		topBarB[i].xl = SIDE_BAR+20*(i-31) + 370 + (i-31)*10;
+		topBarB[i].yl = 5;
+		topBarB[i].xr = SIDE_BAR+20*(i-30) + 370 + (i-31)*10;
+		topBarB[i].yr = 25;
+
+		//_________________________________ Dibujar fondo
+		glColor3f(0.90, 0.90, 0.90);
+		glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);
+
+		AsignaColor(AZUL_FUERTE);
+		glEnable(GL_LINE_STIPPLE);
+		switch(i)
+		{
+			case 31:	//Continua
+				glLineStipple(1, L_LINE);
+				topBarB[i].id = L_LINE;
+				break;
+
+			case 32:	//Punteada
+				glLineStipple(1, L_DOT);
+				topBarB[i].id = L_DOT;
+				break;
+
+			case 33:	//Punto-Gion
+				glLineStipple(1, L_DOTDASH);
+				topBarB[i].id = L_DOTDASH;
+				break;
+
+			case 34:	//Guiones
+				glLineStipple(1, L_DASH);
+				topBarB[i].id = L_DASH;
+				break;
+
+			case 35:	//Punto_guion largo
+				glLineStipple(1, L_LONGDOTDASH);
+				topBarB[i].id = L_LONGDOTDASH;
+				break;
+
+			default:
+				glLineStipple(1, L_LINE);
+				topBarB[i].id = L_LINE;
+				break;
+		}
+
+		glBegin(GL_LINES);
+		glVertex2f(topBarB[i].xl + 3, topBarB[i].yl + 3);
+		glVertex2f(topBarB[i].xr - 3, topBarB[i].yr - 3);
+		glEnd();
+	}
+	glDisable(GL_LINE_STIPPLE);
 }
 
 void SideBar(BOTON* sideBarB)
@@ -247,6 +341,10 @@ CUADRADO* CrearCuadrado(int x, int y, OPCIONES op)
 	aux->direccionx = 1;
 	aux->direcciony = 1;
 	aux->color = op.color;
+	aux->tipo = op.llenado;
+	aux->tipo_linea = op.tipo_linea;
+	aux->factor_linea = op.factor_linea;
+	aux->ancho_linea = op.ancho_linea;
 
 	return aux;
 }
@@ -258,9 +356,13 @@ RECTANGULO* CrearRectangulo(int x, int y, OPCIONES op)
 	aux = (RECTANGULO*)malloc(sizeof(RECTANGULO));
 	aux->x = x;
 	aux->y = y;
-	aux->ancho = 20;
-	aux->alto = 50;
+	aux->ancho = 50;
+	aux->alto = 20;
 	aux->color = op.color;
+	aux->tipo = op.llenado;
+	aux->tipo_linea = op.tipo_linea;
+	aux->factor_linea = op.factor_linea;
+	aux->ancho_linea = op.ancho_linea;
 
 	return aux;
 }
@@ -274,6 +376,10 @@ CIRCULO* CrearCirculo(int x, int y, OPCIONES op)
 	aux->y0 = y;
 	aux->r = 10;
 	aux->color = op.color;
+	aux->tipo = op.llenado;
+	aux->tipo_linea = op.tipo_linea;
+	aux->factor_linea = op.factor_linea;
+	aux->ancho_linea = op.ancho_linea;
 
 	return aux;
 }
@@ -288,6 +394,9 @@ LINEA* CrearLinea(int x, int y, OPCIONES op)
 	aux->xf = x+10;
 	aux->yf = y+10;
 	aux->color = op.color;
+	aux->tipo_linea = op.tipo_linea;
+	aux->factor_linea = op.factor_linea;
+	aux->ancho_linea = op.ancho_linea;
 
 	return aux;
 }
@@ -302,6 +411,9 @@ FREEFORM* CrearFreeForm(int x, int y, OPCIONES op)
 	aux->p->y = y;
 	aux->s = NULL;
 	aux->color = op.color;
+	aux->tipo_linea = op.tipo_linea;
+	aux->factor_linea = op.factor_linea;
+	aux->ancho_linea = op.ancho_linea;
 
 	return aux;
 }
@@ -317,6 +429,10 @@ ELIPSE* CrearElipse(int x, int y, OPCIONES op)
 	aux->b = 20;
 	aux->th = 0;
 	aux->color = op.color;
+	aux->tipo = op.llenado;
+	aux->tipo_linea = op.tipo_linea;
+	aux->factor_linea = op.factor_linea;
+	aux->ancho_linea = op.ancho_linea;
 
 	return aux;
 }
@@ -352,9 +468,13 @@ POLIGONOi* CrearPentagono(int x, int y, OPCIONES op)
 	aux->v = (PUNTO*)malloc(sizeof(PUNTO)*aux->numL);
 	aux->v[0].x = x;	//El primero es el centro
 	aux->v[0].y = y;
+	aux->color = op.color;
+	aux->tipo = op.llenado;
+	aux->tipo_linea = op.tipo_linea;
+	aux->factor_linea = op.factor_linea;
+	aux->ancho_linea = op.ancho_linea;
 
 	CalcularPentagono(aux->v, aux->radio);
-	aux->color = op.color;
 
 	return aux;
 }
@@ -380,9 +500,13 @@ POLIGONOi* CrearHexagono(int x, int y, OPCIONES op)
 	aux->v = (PUNTO*)malloc(sizeof(PUNTO)*aux->numL);
 	aux->v[0].x = x;	//El primero es el centro
 	aux->v[0].y = y;
+	aux->color = op.color;
+	aux->tipo = op.llenado;
+	aux->tipo_linea = op.tipo_linea;
+	aux->factor_linea = op.factor_linea;
+	aux->ancho_linea = op.ancho_linea;
 
 	CalcularHexagono(aux->v, aux->radio);
-	aux->color = op.color;
 
 	return aux;
 }
@@ -405,6 +529,7 @@ PUNTO* CrearPunto(int x, int y, OPCIONES op)
 	aux->x = x;
 	aux->y = y;
 	aux->color = op.color;
+	aux->tamano = op.ancho_linea;
 
 	return aux;
 }
@@ -419,6 +544,10 @@ TRIANGULO* CrearTriangulo(int x, int y, OPCIONES op)
 	aux->lado = 10;
 	aux->direccion = 1;
 	aux->color = op.color;
+	aux->tipo = op.llenado;
+	aux->tipo_linea = op.tipo_linea;
+	aux->factor_linea = op.factor_linea;
+	aux->ancho_linea = op.ancho_linea;
 }
 
 //___________________________________________________________ Dibujado de objetos
@@ -473,33 +602,63 @@ void Dibujar(LISTA* l)
 void Punto(PUNTO *p)
 {
 	AsignaColor(p->color);
+	glPointSize(p->tamano);
 	glBegin(GL_POINTS);
 	glVertex2f(p->x, p->y);
-	glEnd();	
+	glEnd();
+
+	glPointSize(1);
 }
 
 void Triangulo(TRIANGULO* t)
 {
 	AsignaColor(t->color);
+
+	glEnable(GL_LINE_STIPPLE);
+	glLineStipple(t->factor_linea, t->tipo_linea);
+	glLineWidth(t->ancho_linea);
+	glPointSize(t->ancho_linea);
+
+	if((t->direccion < 0 && t->lado > 0) || (t->direccion > 0 && t->lado < 0))
+		glPolygonMode(GL_FRONT, t->tipo);
+	else
+		glPolygonMode(GL_BACK, t->tipo);
+
 	glBegin(GL_POLYGON);
 	glVertex2f(t->x, t->y);
 	glVertex2f(t->x + t->lado/2, t->y - t->direccion*sqrt(3*(t->lado*t->lado)/4));
 	glVertex2f(t->x + t->lado, t->y);
 	glEnd();
+
+	ResetOptions();
 }
 
 void Linea(LINEA *l)
 {
 	AsignaColor(l->color);
+
+	glEnable(GL_LINE_STIPPLE);
+	glLineStipple(l->factor_linea, l->tipo_linea);
+	glLineWidth(l->ancho_linea);
+	glPointSize(l->ancho_linea);
+	
 	glBegin(GL_LINES);
 	glVertex2f(l->xi, l->yi);
 	glVertex2f(l->xf, l->yf);
 	glEnd();
+
+	ResetOptions();
 }
 
 void FreeForm(FREEFORM* f)
 {
 	AsignaColor(f->color);
+	
+	glEnable(GL_LINE_STIPPLE);
+	glLineStipple(f->factor_linea, f->tipo_linea);
+	glLineWidth(f->ancho_linea);
+	glPointSize(f->ancho_linea);
+
 	glBegin(GL_LINE_STRIP);
 	while(f!=NULL)
 	{
@@ -507,36 +666,76 @@ void FreeForm(FREEFORM* f)
 		f = f->s;
 	}
 	glEnd();
+
+	ResetOptions();
 }
 
 void Cuadrado(CUADRADO *c)
 {
 	AsignaColor(c->color);
-	/*glBegin(GL_POLYGON);
-	glVertex2f(c->x, c->y);
-	glVertex2f(c->x + c->l, c->y);
-	glVertex2f(c->x + c->l, c->y + direccion*c->l);
-	glVertex2f(c->x, c->y + direccion*c->l);
-	glEnd();*/
+
+	glEnable(GL_LINE_STIPPLE);
+	glLineStipple(c->factor_linea, c->tipo_linea);
+	glLineWidth(c->ancho_linea);
+	glPointSize(c->ancho_linea);
+
+	if((c->direccionx == 1 && c->direcciony == 1) || (c->direccionx == -1 && c->direcciony == -1))
+	{
+		glPolygonMode(GL_BACK, c->tipo);
+	}
+	else
+	{
+		glPolygonMode(GL_FRONT, c->tipo);
+	}
+
 	glRectf(c->x, c->y, c->x+c->direccionx*c->l, c->y+c->direcciony*c->l);
+	
+	ResetOptions();
 }
 
 void Rectangulo(RECTANGULO *r)
 {
 	AsignaColor(r->color);
+
+	glEnable(GL_LINE_STIPPLE);
+	glLineStipple(r->factor_linea, r->tipo_linea);
+	glLineWidth(r->ancho_linea);
+	glPointSize(r->ancho_linea);
+
+	if((r->ancho > 0 && r->alto > 0) || (r->ancho < 0 && r->alto < 0))
+	{
+		glPolygonMode(GL_BACK, r->tipo);
+	}
+	else
+	{
+		glPolygonMode(GL_FRONT, r->tipo);
+	}
+
 	glRectf(r->x, r->y, r->x+r->ancho, r->y+r->alto);
+	
+	ResetOptions();
 }
 
 void PoligonoI(POLIGONOi *p)
 {
 	unsigned char i;
 	AsignaColor(p->color);
+
+	glEnable(GL_LINE_STIPPLE);
+	glLineStipple(p->factor_linea, p->tipo_linea);
+	glLineWidth(p->ancho_linea);
+	glPointSize(p->ancho_linea);
+
+	glPolygonMode(GL_FRONT, p->tipo);
+
 	glBegin(GL_POLYGON);
 	for(i=1;i<p->numL;i++)
 	{
 		glVertex2f(p->v[i].x, p->v[i].y);
 	}
 	glEnd();
+	
+	ResetOptions();
 }
 
 void Circulo(CIRCULO *c)
@@ -557,9 +756,18 @@ void Circulo(CIRCULO *c)
 
 	float th, x, y;
 	AsignaColor(c->color);
-	glBegin(GL_LINE_LOOP);
 
-	if(0)	//Circunferencia
+	glEnable(GL_LINE_STIPPLE);
+	glLineStipple(c->factor_linea, c->tipo_linea);
+	glLineWidth(c->ancho_linea);
+	glPointSize(c->ancho_linea);
+
+	if(c->tipo == GL_POINT)
+		glBegin(GL_POINTS);
+	else
+		glBegin(GL_LINE_LOOP);
+
+	if(c->tipo == GL_LINE || c->tipo == GL_POINT)	//Circunferencia
 	{
 		for(th=0;th<=360; th+=1)
 		{
@@ -568,7 +776,7 @@ void Circulo(CIRCULO *c)
 			glVertex2f(x,y);
 		}
 	}
-	else 	//Circulo
+	else if(c->tipo == GL_FILL) 	//Circulo
 	{
 		for(x=-1*(c->r+c->x0); x <= c->r+c->x0; x+=0.1)
 		{
@@ -579,15 +787,26 @@ void Circulo(CIRCULO *c)
 		}
 	}	
 	glEnd();
+
+	ResetOptions();
 }
 
 void Elipse(ELIPSE *e)
 {
 	float x,y,th, xr, yr, th2,a,b;
 	AsignaColor(e->color);
-	glBegin(GL_LINE_LOOP);
 
-	if(0)	//Contorno
+	glEnable(GL_LINE_STIPPLE);
+	glLineStipple(e->factor_linea, e->tipo_linea);
+	glLineWidth(e->ancho_linea);
+	glPointSize(e->ancho_linea);
+	
+	if(e->tipo == GL_POINT)
+		glBegin(GL_POINTS);
+	else
+		glBegin(GL_LINE_LOOP);
+
+	if(e->tipo == GL_POINT || e->tipo == GL_LINE)	//Contorno
 	{
 		for(th=0; th<360; th+=1)
 		{
@@ -598,7 +817,7 @@ void Elipse(ELIPSE *e)
 			glVertex2f(xr,yr);
 		}
 	}
-	else 	//Relleno
+	else if(e->tipo == GL_FILL)	//Relleno
  	{
  		a = e->a;
  		b = e->b;
@@ -632,6 +851,8 @@ void Elipse(ELIPSE *e)
 		}
 	}
 	glEnd();
+
+	ResetOptions();
 }
 
 void DibujarTexto(char *text, float x, float y)
@@ -641,4 +862,104 @@ void DibujarTexto(char *text, float x, float y)
 
 	for(c=text; *c!='\0'; c++)
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, *c);
+}
+
+void ResetOptions()
+{
+	glPolygonMode(GL_BACK, GL_FILL);
+	glDisable(GL_LINE_STIPPLE);
+	glLineWidth(1);
+	glPointSize(1);
+}
+
+void PonerAnchoLinea(LISTA* actual, int ancho)
+{
+	switch(actual->tipo){
+		case 's':
+			((CUADRADO*)(actual->figura))->ancho_linea = ancho;
+			break;
+		
+		case 'r':
+			((RECTANGULO*)(actual->figura))->ancho_linea = ancho;
+			break;
+		
+		case 'c':
+			((CIRCULO*)(actual->figura))->ancho_linea = ancho;
+			break;
+
+		case 'l':
+			((LINEA*)(actual->figura))->ancho_linea = ancho;
+			break;
+
+		case 'e':
+			((ELIPSE*)(actual->figura))->ancho_linea = ancho;
+			break;
+
+		case 'p':
+			((POLIGONOi*)(actual->figura))->ancho_linea = ancho;
+			break;
+
+		case 'h':
+			((POLIGONOi*)(actual->figura))->ancho_linea = ancho;
+			break;
+
+		case 'd':
+			((PUNTO*)(actual->figura))->tamano= ancho;
+			break;
+
+		case 't':
+			((TRIANGULO*)(actual->figura))->ancho_linea = ancho;
+			break;
+
+		case 'f':
+			((FREEFORM*)(actual->figura))->ancho_linea = ancho;
+			break;
+
+		default:
+			break;
+	}
+}
+
+void PonerFactorLinea(LISTA* actual, int factor)
+{
+	switch(actual->tipo){
+		case 's':
+			((CUADRADO*)(actual->figura))->factor_linea = factor;
+			break;
+		
+		case 'r':
+			((RECTANGULO*)(actual->figura))->factor_linea = factor;
+			break;
+		
+		case 'c':
+			((CIRCULO*)(actual->figura))->factor_linea = factor;
+			break;
+
+		case 'l':
+			((LINEA*)(actual->figura))->factor_linea = factor;
+			break;
+
+		case 'e':
+			((ELIPSE*)(actual->figura))->factor_linea = factor;
+			break;
+
+		case 'p':
+			((POLIGONOi*)(actual->figura))->factor_linea = factor;
+			break;
+
+		case 'h':
+			((POLIGONOi*)(actual->figura))->factor_linea = factor;
+			break;
+
+		case 't':
+			((TRIANGULO*)(actual->figura))->factor_linea = factor;
+			break;
+
+		case 'f':
+			((FREEFORM*)(actual->figura))->factor_linea = factor;
+			break;
+
+		default:
+			break;
+	}
 }

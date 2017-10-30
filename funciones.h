@@ -8,8 +8,13 @@
 #define TOP_BAR 30
 #define SIDE_BAR 30
 #define NSIDE_BAR_B 10
-#define NTOP_BAR_B 28  
+#define NTOP_BAR_B 36  
 #define NCOLORES 28
+#define L_LINE 0xFFFF
+#define L_DOT 0xAAAA
+#define L_DOTDASH 0xC9C9
+#define L_DASH 0x6666
+#define L_LONGDOTDASH 0xBEBE
 
 
 typedef enum{			//Enumeración de colores
@@ -58,17 +63,18 @@ typedef struct{			//Estructura línea (Pi,Pf)
 	float yi;
 	float yf;
 	COLOR color;
-	int ancho;
-	char tipo;
+	int ancho_linea;
+	int tipo_linea;
+	int factor_linea;
 }LINEA;
 
 typedef struct FREEFORM{
 	PUNTO* p;
 	struct FREEFORM* s;
 	COLOR color;
-	char tipo_linea;
-	char tipo;
+	int tipo_linea;
 	int ancho_linea;
+	int factor_linea;
 }FREEFORM;
 
 typedef struct{
@@ -78,9 +84,10 @@ typedef struct{
 	float direccionx;
 	float direcciony;
 	COLOR color;
-	char tipo_linea;
-	char tipo;
+	int tipo_linea;
+	int tipo;
 	int ancho_linea;
+	int factor_linea;
 }CUADRADO;
 
 typedef struct 
@@ -90,9 +97,10 @@ typedef struct
 	float ancho;
 	float alto;
 	COLOR color;
-	char tipo_linea;
-	char tipo;
+	int tipo_linea;
+	int tipo;
 	int ancho_linea;
+	int factor_linea;
 }RECTANGULO;
 
 typedef struct 
@@ -101,9 +109,10 @@ typedef struct
 	float radio;
 	PUNTO *v;
 	COLOR color;
-	char tipo_linea;
-	char tipo;
+	int tipo_linea;
+	int tipo;
 	int ancho_linea;
+	int factor_linea;
 }POLIGONOi;
 
 typedef struct               //Estructura círculo
@@ -112,9 +121,10 @@ typedef struct               //Estructura círculo
 	float y0;
 	float r;
 	COLOR color;
-	char tipo_linea;
-	char tipo;
+	int tipo_linea;
+	int tipo;
 	int ancho_linea;
+	int factor_linea;
 }CIRCULO;
 
 typedef struct				//Estructura elipse
@@ -125,9 +135,10 @@ typedef struct				//Estructura elipse
 	float b;
 	float th;
 	COLOR color;
-	char tipo_linea;
-	char tipo;
+	int tipo_linea;
+	int tipo;
 	int ancho_linea;
+	int factor_linea;
 }ELIPSE;
 
 typedef struct 				//Estructura triangulo
@@ -137,9 +148,10 @@ typedef struct 				//Estructura triangulo
 	float lado;
 	float direccion;
 	COLOR color;
-	char tipo_linea;
-	char tipo;
+	int tipo_linea;
+	int tipo;
 	int ancho_linea;
+	int factor_linea;
 }TRIANGULO;
 
 //Lista enlazada
@@ -154,8 +166,9 @@ typedef struct OPCIONES	//Opciones con las que se puede dibujar cada figura
 {
 	COLOR color;	//PaletaColor
 	int tipo_linea;
-	char tipo;		//f->Fill, p->Point, l->Line
-	int ancho;
+	int llenado;		//fill, line, point
+	int ancho_linea;
+	int factor_linea;
 }OPCIONES;
 
 typedef struct BOTON
@@ -164,7 +177,7 @@ typedef struct BOTON
 	float yl;
 	float xr;
 	float yr;
-	char id;
+	int id;
 }BOTON;
 
 //________________________________________________ Prototipos
@@ -173,6 +186,8 @@ void display(void);
 void PassiveMouse(int x, int y);
 void Mouse(int button, int state, int x, int y);
 void ActiveMouse(int x, int y);
+void Keyboard(unsigned char key, int x, int y);
+void SpecialKeyboard(int key, int x, int y);
 //Figuras
 void Dibujar(LISTA* l);
 void Linea(LINEA *l);
@@ -193,6 +208,9 @@ void Push(LISTA** lista, LISTA** elemento);
 int ClickBar(BOTON* botones, int size, int x, int y);
 int ClickBoton(BOTON boton, int x, int y);
 float Min(int a, int b);
+void ResetOptions();
+void PonerAnchoLinea(LISTA* actual, int ancho);
+void PonerFactorLinea(LISTA* actual, int factor);
 //Creacion de figuras
 CUADRADO* CrearCuadrado(int x, int y, OPCIONES op);
 RECTANGULO* CrearRectangulo(int x, int y, OPCIONES op);
