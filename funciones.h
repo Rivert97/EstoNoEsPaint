@@ -178,6 +178,7 @@ typedef struct BOTON
 	float xr;
 	float yr;
 	int id;
+	int checked;
 }BOTON;
 
 //________________________________________________ Prototipos
@@ -202,8 +203,8 @@ void FreeForm(FREEFORM* f);
 void DibujarTexto(char *text, float x, float y);
 //Extras
 void AsignaColor(COLOR color);
-void TopBar(BOTON* topBarB);
-void SideBar(BOTON* sideBarB);
+void TopBar(BOTON* topBarB, OPCIONES* op);
+void SideBar(BOTON* sideBarB, char tipo);
 void Push(LISTA** lista, LISTA** elemento);
 void Pop(LISTA** lista);
 int ClickBar(BOTON* botones, int size, int x, int y);

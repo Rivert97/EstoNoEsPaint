@@ -164,7 +164,7 @@ void AsignaColor(COLOR color)
 	glColor3f(PaletaColor[color][0],PaletaColor[color][1],PaletaColor[color][2]);
 }
 
-void TopBar(BOTON* topBarB)
+void TopBar(BOTON* topBarB, OPCIONES* op)
 {
 	int i;
 	//__________________________ Fondo
@@ -180,12 +180,21 @@ void TopBar(BOTON* topBarB)
 		topBarB[i].xr = SIDE_BAR+15*(i+1);
 		topBarB[i].yr = 15;
 		topBarB[i].id = i;
+		if(op->color == topBarB[i].id)
+			topBarB[i].checked = 1;
+		else
+			topBarB[i].checked = 0;
+
 
 		topBarB[i+14].xl = SIDE_BAR+15*i;
 		topBarB[i+14].yl = 15;
 		topBarB[i+14].xr = SIDE_BAR+15*(i+1);
 		topBarB[i+14].yr = 30;
 		topBarB[i+14].id = i+14;
+		if(op->color == topBarB[i+14].id)
+			topBarB[i+14].checked = 1;
+		else
+			topBarB[i+14].checked = 0;
 
 		//_______________________ dibujar cuadros
 		AsignaColor(i);
@@ -202,25 +211,53 @@ void TopBar(BOTON* topBarB)
 		topBarB[i].yl = 5;
 		topBarB[i].xr = SIDE_BAR+20*(i-27) + 250 + (i-28)*10;
 		topBarB[i].yr = 25;
+		/*if(op->llenado == topBarB[i].id)
+			topBarB[i].checked = 1;
+		else
+			topBarB[i].checked = 0;
 
 		//_________________________________ Dibujar fondo
-		glColor3f(0.90, 0.90, 0.90);
-		glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);
+		if(topBarB[i].checked == 1)
+			glColor3f(0.75, 0.75, 0.75);
+		else
+			glColor3f(0.90, 0.90, 0.90);
+		glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);*/
 		
-		AsignaColor(AZUL_FUERTE);
+		
 		switch(i)
 		{
 			case 28: //GL_FILL
+				//______________________________ Fondo
+				if(op->llenado == GL_FILL)
+					glColor3f(0.60, 0.60, 0.60);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);
+				//
 				glPolygonMode(GL_BACK, GL_FILL);
 				topBarB[i].id = GL_FILL;
 				break;
 
 			case 29:	//GL_LINE
+				//______________________________ Fondo
+				if(op->llenado == GL_LINE)
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);
+				//
 				glPolygonMode(GL_BACK, GL_LINE);
 				topBarB[i].id = GL_LINE;
 				break;
 
-			case 30:	//GL_POINTS
+			case 30:	//GL_POINT
+				//______________________________ Fondo
+				if(op->llenado == GL_POINT)
+					glColor3f(0.60, 0.60, 0.60);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);
+				//
 				glPolygonMode(GL_BACK, GL_POINT);
 				topBarB[i].id = GL_POINT;
 				break;
@@ -229,6 +266,8 @@ void TopBar(BOTON* topBarB)
 				break;
 		}
 
+		//__________________________ Dibujar figura
+		AsignaColor(AZUL_FUERTE);
 		glRectf(topBarB[i].xl + 3, topBarB[i].yl + 3, topBarB[i].xr - 3, topBarB[i].yr - 3);
 		glPolygonMode(GL_BACK, GL_FILL);
 	}
@@ -242,11 +281,6 @@ void TopBar(BOTON* topBarB)
 		topBarB[i].xr = SIDE_BAR+20*(i-30) + 370 + (i-31)*10;
 		topBarB[i].yr = 25;
 
-		//_________________________________ Dibujar fondo
-		glColor3f(0.90, 0.90, 0.90);
-		glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);
-
-		AsignaColor(AZUL_FUERTE);
 		glEnable(GL_LINE_STIPPLE);
 		switch(i)
 		{
@@ -281,6 +315,20 @@ void TopBar(BOTON* topBarB)
 				break;
 		}
 
+		if(op->tipo_linea == topBarB[i].id)
+			topBarB[i].checked = 1;
+		else
+			topBarB[i].checked = 0;
+
+		//_________________________________ Dibujar fondo
+		if(topBarB[i].checked == 1)
+			glColor3f(0.65, 0.65, 0.65);
+		else
+			glColor3f(0.90, 0.90, 0.90);
+		glRectf(topBarB[i].xl, topBarB[i].yl, topBarB[i].xr, topBarB[i].yr);
+
+		//__________________________________ Dibujar figura
+		AsignaColor(AZUL_FUERTE);
 		glBegin(GL_LINES);
 		glVertex2f(topBarB[i].xl + 3, topBarB[i].yl + 3);
 		glVertex2f(topBarB[i].xr - 3, topBarB[i].yr - 3);
@@ -289,7 +337,7 @@ void TopBar(BOTON* topBarB)
 	glDisable(GL_LINE_STIPPLE);
 }
 
-void SideBar(BOTON* sideBarB)
+void SideBar(BOTON* sideBarB, char tipo)
 {
 	int i;
 	float th, x, y;
@@ -304,19 +352,22 @@ void SideBar(BOTON* sideBarB)
 		sideBarB[i].xl = 5;
 		sideBarB[i].yl = TOP_BAR+20*i+(i*10);
 		sideBarB[i].xr = 25;
-		sideBarB[i].yr = TOP_BAR+20*(i+1)+(i*10);
-
-		//_________________________________ Dibujar fondo
-		glColor3f(0.90, 0.90, 0.90);
-		glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
-
-		AsignaColor(NEGRO);
-		glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
+		sideBarB[i].yr = TOP_BAR+20*(i+1)+(i*10);		
 		
 		//________________________________ Dibujar figuras internas
 		switch(i)
 		{
 			case 0: //punto
+				//_________________________ Dibujar fondo
+				if(tipo == 'd')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
 				sideBarB[i].id = 'd';
 				glPointSize(3);
 				glBegin(GL_POINTS);
@@ -327,6 +378,16 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 1:	//Linea
+				//_________________________ Dibujar fondo
+				if(tipo == 'l')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+				
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
 				sideBarB[i].id = 'l';
 				glBegin(GL_LINES);
 				glVertex2f(sideBarB[i].xl + 2, sideBarB[i].yl + 2);
@@ -335,6 +396,16 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 2:	//Linea libre (freeform)
+				//_________________________ Dibujar fondo
+				if(tipo == 'f')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+				
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
 				sideBarB[i].id = 'f';
 				glBegin(GL_LINE_STRIP);
 				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 3);
@@ -348,6 +419,16 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 3://Cuadrado
+				//_________________________ Dibujar fondo
+				if(tipo == 's')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+				
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
 				sideBarB[i].id = 's';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 3);
@@ -358,6 +439,16 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 4://Rectangulo
+				//_________________________ Dibujar fondo
+				if(tipo == 'r')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+				
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
 				sideBarB[i].id = 'r';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 6);
@@ -368,6 +459,16 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 5:	//Triangulo
+				//_________________________ Dibujar fondo
+				if(tipo == 't')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+				
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
 				sideBarB[i].id = 't';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 3, TOP_BAR+20*(i+1)+(i*10)-3);
@@ -377,6 +478,16 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 6:	//Circulo
+				//_________________________ Dibujar fondo
+				if(tipo == 'c')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+				
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
 				sideBarB[i].id = 'c';
 				glBegin(GL_LINE_LOOP);
 				for(th=0;th<=360; th+=1)
@@ -389,6 +500,16 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 7:	//Elipse
+				//_________________________ Dibujar fondo
+				if(tipo == 'e')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+				
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
 				sideBarB[i].id = 'e';
 				glBegin(GL_LINE_LOOP);
 				for(th=0; th<360; th+=1)
@@ -401,6 +522,16 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 8:	//Pentagono
+				//_________________________ Dibujar fondo
+				if(tipo == 'p')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+				
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
 				sideBarB[i].id = 'p';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + (sideBarB[i].xr - sideBarB[i].xl)/2, sideBarB[i].yl + 2);
@@ -412,6 +543,16 @@ void SideBar(BOTON* sideBarB)
 				break;
 
 			case 9:	//Hexágono
+				//_________________________ Dibujar fondo
+				if(tipo == 'h')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+				
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
 				sideBarB[i].id = 'h';
 				glBegin(GL_POLYGON);
 				glVertex2f(sideBarB[i].xl + 6, sideBarB[i].yl + 3);

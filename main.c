@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 
 	//Inicialización de variables
 	cabeza = NULL;
-	tipo = 's';
+	tipo = 'f';
 	op.color = NEGRO;
 	op.tipo_linea = L_LINE;
 	op.llenado = GL_FILL;
@@ -57,8 +57,8 @@ void display()
 	}
 
 	//__________________________________ Barras de herramientas
-	TopBar(topBarB);
-	SideBar(sideBarB);
+	TopBar(topBarB, &op);
+	SideBar(sideBarB, tipo);
 
 	
 
@@ -136,6 +136,7 @@ void Mouse(int button, int state, int x, int y)
 			{
 				tipo = sideBarB[index].id;
 			}
+			glutPostRedisplay();
 		}
 		else 	//Click en la barra de arriba
 		{
@@ -156,6 +157,7 @@ void Mouse(int button, int state, int x, int y)
 					op.tipo_linea = topBarB[index].id;
 				}
 			}
+			glutPostRedisplay();
 		}
 	}
 	else if(state == GLUT_UP)
