@@ -127,64 +127,6 @@ void Mouse(int button, int state, int x, int y)
 				actual = aux;
 				glutPostRedisplay();
 			}
-			else if(button == GLUT_RIGHT_BUTTON)
-			{
-				while(cabeza != NULL)
-				{
-					aux = cabeza;
-					cabeza = cabeza->s;
-
-					switch(aux->tipo){
-						case 's':
-							free((CUADRADO*)(aux->figura));
-							break;
-						
-						case 'r':
-							free((RECTANGULO*)(aux->figura));
-							break;
-						
-						case 'c':
-							free((CIRCULO*)(aux->figura));
-							break;
-
-						case 'l':
-							free((LINEA*)(aux->figura));
-							break;
-
-						case 'e':
-							free((ELIPSE*)(aux->figura));
-							break;
-
-						case 'p':
-							free(((POLIGONOi*)(aux->figura))->v);
-							free((POLIGONOi*)(aux->figura));
-							break;
-
-						case 'h':
-							free(((POLIGONOi*)(aux->figura))->v);
-							free((POLIGONOi*)(aux->figura));
-							break;
-
-						case 'd':
-							free((PUNTO*)(aux->figura));
-							break;
-
-						case 't':
-							free((TRIANGULO*)(aux->figura));
-							break;
-
-						case 'f':
-							free(((FREEFORM*)(aux->figura))->p);
-							free((FREEFORM*)(aux->figura));
-							break;
-
-						default:
-							break;
-					}
-					free(aux);
-				}
-				glutPostRedisplay();
-			}
 		}
 		else if(x < SIDE_BAR && y > TOP_BAR)	//Click en barra de la izquierda
 		{
@@ -302,9 +244,10 @@ void PassiveMouse(int x, int y)
 
 void Keyboard(unsigned char key, int x, int y)
 {
+	LISTA* aux;
 	switch(key)
 	{
-		case '+':
+		case '+':	//Aumentar ancho de linea
 			if(op.ancho_linea < 10)
 			{
 				if(actual != NULL)
@@ -319,7 +262,7 @@ void Keyboard(unsigned char key, int x, int y)
 			}
 			break;
 
-		case '-':
+		case '-':	//Disminuir ancho de linea
 			if(op.ancho_linea > 0)
 			{
 				if(actual != NULL)
@@ -332,6 +275,73 @@ void Keyboard(unsigned char key, int x, int y)
 					op.ancho_linea--;
 				}
 			}
+			break;
+
+		case 'z':	//Deshacer
+			Pop(&cabeza);
+			glutPostRedisplay();
+			break;
+
+		case 27:
+		case 'c':	//limpiar pantalla
+			while(cabeza != NULL)
+			{
+				aux = cabeza;
+				cabeza = cabeza->s;
+
+				switch(aux->tipo){
+					case 's':
+						free((CUADRADO*)(aux->figura));
+						break;
+					
+					case 'r':
+						free((RECTANGULO*)(aux->figura));
+						break;
+					
+					case 'c':
+						free((CIRCULO*)(aux->figura));
+						break;
+
+					case 'l':
+						free((LINEA*)(aux->figura));
+						break;
+
+					case 'e':
+						free((ELIPSE*)(aux->figura));
+						break;
+
+					case 'p':
+						free(((POLIGONOi*)(aux->figura))->v);
+						free((POLIGONOi*)(aux->figura));
+						break;
+
+					case 'h':
+						free(((POLIGONOi*)(aux->figura))->v);
+						free((POLIGONOi*)(aux->figura));
+						break;
+
+					case 'd':
+						free((PUNTO*)(aux->figura));
+						break;
+
+					case 't':
+						free((TRIANGULO*)(aux->figura));
+						break;
+
+					case 'f':
+						free(((FREEFORM*)(aux->figura))->p);
+						free((FREEFORM*)(aux->figura));
+						break;
+
+					default:
+						break;
+				}
+				free(aux);
+			}
+			glutPostRedisplay();
+
+			if(key == 27)
+				exit(0);
 			break;
 
 		default:

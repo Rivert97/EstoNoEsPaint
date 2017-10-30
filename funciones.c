@@ -38,6 +38,126 @@ void Push(LISTA** lista, LISTA** elemento)
 	}
 }
 
+void Pop(LISTA** lista)
+{
+	LISTA* aux = *lista;
+	LISTA* aux2 = aux;
+
+	if(*lista == NULL)
+		return;
+	else if((*lista)->s == NULL)
+	{
+		switch(aux->tipo){
+			case 's':
+				free((CUADRADO*)(aux->figura));
+				break;
+			
+			case 'r':
+				free((RECTANGULO*)(aux->figura));
+				break;
+			
+			case 'c':
+				free((CIRCULO*)(aux->figura));
+				break;
+
+			case 'l':
+				free((LINEA*)(aux->figura));
+				break;
+
+			case 'e':
+				free((ELIPSE*)(aux->figura));
+				break;
+
+			case 'p':
+				free(((POLIGONOi*)(aux->figura))->v);
+				free((POLIGONOi*)(aux->figura));
+				break;
+
+			case 'h':
+				free(((POLIGONOi*)(aux->figura))->v);
+				free((POLIGONOi*)(aux->figura));
+				break;
+
+			case 'd':
+				free((PUNTO*)(aux->figura));
+				break;
+
+			case 't':
+				free((TRIANGULO*)(aux->figura));
+				break;
+
+			case 'f':
+				free(((FREEFORM*)(aux->figura))->p);
+				free((FREEFORM*)(aux->figura));
+				break;
+
+			default:
+				break;
+		}
+		free(aux);
+		*lista = NULL;
+	}
+	else
+	{
+		while(aux->s != NULL)
+		{
+			aux2 = aux;
+			aux = aux->s;
+		}
+
+		switch(aux->tipo){
+			case 's':
+				free((CUADRADO*)(aux->figura));
+				break;
+			
+			case 'r':
+				free((RECTANGULO*)(aux->figura));
+				break;
+			
+			case 'c':
+				free((CIRCULO*)(aux->figura));
+				break;
+
+			case 'l':
+				free((LINEA*)(aux->figura));
+				break;
+
+			case 'e':
+				free((ELIPSE*)(aux->figura));
+				break;
+
+			case 'p':
+				free(((POLIGONOi*)(aux->figura))->v);
+				free((POLIGONOi*)(aux->figura));
+				break;
+
+			case 'h':
+				free(((POLIGONOi*)(aux->figura))->v);
+				free((POLIGONOi*)(aux->figura));
+				break;
+
+			case 'd':
+				free((PUNTO*)(aux->figura));
+				break;
+
+			case 't':
+				free((TRIANGULO*)(aux->figura));
+				break;
+
+			case 'f':
+				free(((FREEFORM*)(aux->figura))->p);
+				free((FREEFORM*)(aux->figura));
+				break;
+
+			default:
+				break;
+		}
+		free(aux);
+
+		aux2->s = NULL;
+	}
+}
+
 //____________________________________________________________ Funciones extras
 void AsignaColor(COLOR color)
 {

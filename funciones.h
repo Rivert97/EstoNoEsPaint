@@ -205,6 +205,7 @@ void AsignaColor(COLOR color);
 void TopBar(BOTON* topBarB);
 void SideBar(BOTON* sideBarB);
 void Push(LISTA** lista, LISTA** elemento);
+void Pop(LISTA** lista);
 int ClickBar(BOTON* botones, int size, int x, int y);
 int ClickBoton(BOTON boton, int x, int y);
 float Min(int a, int b);
