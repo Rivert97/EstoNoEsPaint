@@ -7,7 +7,7 @@
 #define ALTO 600
 #define TOP_BAR 30
 #define SIDE_BAR 30
-#define NSIDE_BAR_B 10
+#define NSIDE_BAR_B 11
 #define NTOP_BAR_B 36  
 #define NCOLORES 28
 #define L_LINE 0xFFFF
@@ -105,7 +105,7 @@ typedef struct
 
 typedef struct 
 {
-	unsigned char numL;	//+1, el primero es el centro
+	unsigned char numL;	//+1, el primero es el centro (en regular)
 	float radio;
 	PUNTO *v;
 	COLOR color;
@@ -158,7 +158,7 @@ typedef struct 				//Estructura triangulo
 typedef struct LISTA
 {
 	void* figura;
-	char tipo;			//s->cuadrado, e->elipse, c->circulo, p->pentagono, h->hexagono, r->rectangulo, l->linea, d->punto
+	char tipo;			//s->cuadrado, e->elipse, c->circulo, p->pentagono, h->hexagono, r->rectangulo, l->linea, d->punto, i->irregular
 	struct LISTA* s;
 }LISTA;
 
@@ -219,7 +219,7 @@ RECTANGULO* CrearRectangulo(int x, int y, OPCIONES op);
 CIRCULO* CrearCirculo(int x, int y, OPCIONES op);
 LINEA* CrearLinea(int x, int y, OPCIONES op);
 ELIPSE* CrearElipse(int x, int y, OPCIONES op);
-//PUNTO* CrearPoligonoi(int x, int y, int numL, OPCIONES op);
+POLIGONOi* CrearPoligonoi(int x, int y, OPCIONES op);
 POLIGONOi* CrearPentagono(int x, int y, OPCIONES op);
 void CalcularPentagono(PUNTO* v, float radio);
 POLIGONOi* CrearHexagono(int x, int y, OPCIONES op);

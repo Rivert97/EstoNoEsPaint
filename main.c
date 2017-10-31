@@ -29,6 +29,7 @@ int main(int argc, char** argv)
 
 	//Inicialización de variables
 	cabeza = NULL;
+	actual = NULL;
 	tipo = 'f';
 	op.color = NEGRO;
 	op.tipo_linea = L_LINE;
@@ -74,57 +75,86 @@ void Mouse(int button, int state, int x, int y)
 		{
 			if(button == GLUT_LEFT_BUTTON)
 			{
-				aux = (LISTA*)malloc(sizeof(LISTA));
-				aux->tipo = tipo;
-				aux->s = NULL;
+				if(actual == NULL)
+				{
+					aux = (LISTA*)malloc(sizeof(LISTA));
+					aux->tipo = tipo;
+					aux->s = NULL;
 
-				switch(tipo){
-					case 's':
-						aux->figura = (void*)CrearCuadrado(x, y, op);
-						break;
-					
-					case 'r':
-						aux->figura = (void*)CrearRectangulo(x, y, op);
-						break;
-					
-					case 'c':
-						aux->figura = (void*)CrearCirculo(x, y, op);
-						break;
+					switch(tipo){
+						case 's':
+							aux->figura = (void*)CrearCuadrado(x, y, op);
+							break;
+						
+						case 'r':
+							aux->figura = (void*)CrearRectangulo(x, y, op);
+							break;
+						
+						case 'c':
+							aux->figura = (void*)CrearCirculo(x, y, op);
+							break;
 
-					case 'l':
-						aux->figura = (void*)CrearLinea(x, y, op);
-						break;
+						case 'l':
+							aux->figura = (void*)CrearLinea(x, y, op);
+							break;
 
-					case 'e':
-						aux->figura = (void*)CrearElipse(x, y, op);
-						break;
+						case 'e':
+							aux->figura = (void*)CrearElipse(x, y, op);
+							break;
 
-					case 'p':
-						aux->figura = (void*)CrearPentagono(x, y, op);
-						break;
+						case 'p':
+							aux->figura = (void*)CrearPentagono(x, y, op);
+							break;
 
-					case 'h':
-						aux->figura = (void*)CrearHexagono(x, y, op);
-						break;
+						case 'h':
+							aux->figura = (void*)CrearHexagono(x, y, op);
+							break;
 
-					case 'd':
-						aux->figura = (void*)CrearPunto(x, y, op);
-						break;
+						case 'd':
+							aux->figura = (void*)CrearPunto(x, y, op);
+							break;
 
-					case 't':
-						aux->figura = (void*)CrearTriangulo(x, y, op);
-						break;
+						case 't':
+							aux->figura = (void*)CrearTriangulo(x, y, op);
+							break;
 
-					case 'f':
-						aux->figura = (void*)CrearFreeForm(x, y, op);
-						break;
+						case 'f':
+							aux->figura = (void*)CrearFreeForm(x, y, op);
+							break;
 
-					default:
-						break;
+						case 'i':
+							aux->figura = (void*)CrearPoligonoi(x, y, op);
+							break;
+
+						default:
+							break;
+					}
+				
+					Push(&cabeza, &aux);
+					actual = aux;
 				}
+				else //Esto solo pasa cuando es un poligono irregular
+				{
+					POLIGONOi* p = ((POLIGONOi*)(actual->figura));
+					PUNTO* v1;
+					int i;
 
-				Push(&cabeza, &aux);
-				actual = aux;
+					//Crear arreglo de nuevo tamaño
+					v1 = (PUNTO*)malloc(sizeof(PUNTO)*p->numL++);
+
+					//Copiar lo que ya se tenia al nuevo arreglo
+					for(i=0; i<p->numL-1;i++)
+					{
+						v1[i].x = p->v[i].x;
+						v1[i].y = p->v[i].y;
+					}
+					v1[i].x = x;
+					v1[i].y = y;
+
+					//Liberar arreglo anterior
+					free(p->v);
+					p->v = v1;
+				}
 				glutPostRedisplay();
 			}
 		}
@@ -135,6 +165,8 @@ void Mouse(int button, int state, int x, int y)
 			if(index >= 0)
 			{
 				tipo = sideBarB[index].id;
+				if(actual != NULL)
+					actual = NULL;
 			}
 			glutPostRedisplay();
 		}
@@ -162,7 +194,8 @@ void Mouse(int button, int state, int x, int y)
 	}
 	else if(state == GLUT_UP)
 	{
-		actual = NULL;
+		if(tipo != 'i')
+			actual = NULL;
 	}
 }
 
@@ -282,6 +315,7 @@ void Keyboard(unsigned char key, int x, int y)
 		case 'z':	//Deshacer
 			Pop(&cabeza);
 			glutPostRedisplay();
+			actual = NULL;
 			break;
 
 		case 27:
@@ -313,13 +347,11 @@ void Keyboard(unsigned char key, int x, int y)
 						break;
 
 					case 'p':
-						free(((POLIGONOi*)(aux->figura))->v);
-						free((POLIGONOi*)(aux->figura));
-						break;
-
 					case 'h':
+					case 'i':
 						free(((POLIGONOi*)(aux->figura))->v);
 						free((POLIGONOi*)(aux->figura));
+						actual = NULL;
 						break;
 
 					case 'd':
@@ -346,6 +378,10 @@ void Keyboard(unsigned char key, int x, int y)
 				exit(0);
 			break;
 
+		case 13:	//Enter para terminar el poligono irregular
+			if(tipo == 'i' && actual != NULL)
+				actual = NULL;
+			break;
 		default:
 			break;
 	}

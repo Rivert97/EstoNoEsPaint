@@ -557,6 +557,27 @@ void SideBar(BOTON* sideBarB, char tipo)
 				glVertex2f(sideBarB[i].xl + 2, sideBarB[i].yl + (sideBarB[i].yr - sideBarB[i].yl)/2);
 				glEnd();
 				break;
+
+			case 10: //Irregular
+				//_________________________ Dibujar fondo
+				if(tipo == 'i')
+					glColor3f(0.65, 0.65, 0.65);
+				else
+					glColor3f(0.90, 0.90, 0.90);
+				glRectf(sideBarB[i].xl, sideBarB[i].yl, sideBarB[i].xr, sideBarB[i].yr);
+				
+				//__________________________ Dibujar figura
+				AsignaColor(NEGRO);
+				glPolygonMode(GL_BACK, GL_LINE);//OJO AQUI!!!!!! normalmente es front
+				sideBarB[i].id = 'i';
+				glBegin(GL_POLYGON);
+				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 2);
+				glVertex2f(sideBarB[i].xr - 2, sideBarB[i].yl + 8);
+				glVertex2f(sideBarB[i].xr - 7, sideBarB[i].yr - 3);
+				glVertex2f(sideBarB[i].xl + 5, sideBarB[i].yr - 2);
+				glVertex2f(sideBarB[i].xl + 3, sideBarB[i].yl + 5);
+				glEnd();
+				break;
 		}
 		glPolygonMode(GL_BACK, GL_FILL);
 	}
@@ -692,25 +713,25 @@ ELIPSE* CrearElipse(int x, int y, OPCIONES op)
 	return aux;
 }
 
-/*POLIGONOi* CrearPoligonoi(int x, int y, int numL, OPCIONES op)
+POLIGONOi* CrearPoligonoi(int x, int y, OPCIONES op)
 {
-	PUNTO* aux;
+	POLIGONOi* aux;
 
-	aux->v = (PUNTO*)malloc(sizeof(PUNTO)*numL);
+	aux = (POLIGONOi*)malloc(sizeof(POLIGONOi));
+	aux->numL = 1;
+	aux->radio = 0; //0 para poligono irregular
+
+	aux->v = (PUNTO*)malloc(sizeof(PUNTO)*aux->numL);
 	aux->v[0].x = x;
 	aux->v[0].y = y;
-	aux->v[1].x = x+10;
-	aux->v[1].y = y+10;
-	aux->v[2].x = x+20;
-	aux->v[2].y = y;
-	aux->v[3].x = x+15;
-	aux->v[3].y = y-10;
-	aux->v[4].x = x+5;
-	aux->v[4].y = y-10;
 	aux->color = op.color;
+	aux->tipo = op.llenado;
+	aux->tipo_linea = op.tipo_linea;
+	aux->factor_linea = op.factor_linea;
+	aux->ancho_linea = op.ancho_linea;
 
 	return aux;
-}*/
+}
 
 POLIGONOi* CrearPentagono(int x, int y, OPCIONES op)
 {
@@ -849,6 +870,9 @@ void Dibujar(LISTA* l)
 			FreeForm((FREEFORM*)(l->figura));
 			break;
 
+		case 'i':
+			PoligonoI((POLIGONOi*)(l->figura));
+			break;
 		default:
 			break;
 	}
@@ -984,7 +1008,13 @@ void PoligonoI(POLIGONOi *p)
 	glPolygonMode(GL_FRONT, p->tipo);
 
 	glBegin(GL_POLYGON);
-	for(i=1;i<p->numL;i++)
+
+	if(p->radio == 0)	//Para poligono irregular
+		i = 0;
+	else 				//Para pentagono y hexágono
+		i = 1;
+
+	for(;i<p->numL;i++)
 	{
 		glVertex2f(p->v[i].x, p->v[i].y);
 	}
